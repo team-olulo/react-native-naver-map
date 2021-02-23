@@ -166,12 +166,16 @@ export default class NaverMapView extends Component<NaverMapViewProps, {}> {
     };
 
     private dispatchViewManagerCommand = (command: string, arg: any) => {
+        // TODO:
         // @ts-ignore
         return Platform.select({
+            // TODO:
             // @ts-ignore
             android: () => UIManager.dispatchViewManagerCommand(
+                // TODO:
                 // @ts-ignore
                 this.nodeHandle,
+                // TODO:
                 // @ts-ignore
                 UIManager.getViewManagerConfig('RNNaverMapView').Commands[command],
                 arg,
@@ -217,6 +221,8 @@ export default class NaverMapView extends Component<NaverMapViewProps, {}> {
         const ViewClass = useTextureView ? RNNaverMapViewTexture : RNNaverMapView;
 
         return <ViewClass
+            // TODO:
+            // @ts-ignore
             ref={this.resolveRef}
             {...this.props}
             onInitialized={onInitialized}
@@ -285,6 +291,8 @@ export class Marker extends Component<MarkerProps> {
     render() {
         return <RNNaverMapMarker
             {...this.props}
+            // TODO
+            // @ts-ignore
             image={getImageUri(this.props.image)}
             caption={this.props.caption && {
                 ...this.props.caption,
@@ -342,6 +350,8 @@ export class Polygon extends Component<PolygonProps> {
             android: () => <RNNaverMapPolygonOverlay {...this.props} />,
             ios: () => <RNNaverMapPolygonOverlay
                 {...this.props}
+                // TODO:
+                // @ts-ignore
                 coordinates={{
                     exteriorRing: this.props.coordinates,
                     interiorRings: this.props.holes,
@@ -369,6 +379,8 @@ export class Path extends Component<PathProps> {
     render() {
         return <RNNaverMapPathOverlay
             {...this.props}
+            // TODO:
+            // @ts-ignore
             pattern={getImageUri(this.props.pattern)}
         />
     }
@@ -385,6 +397,8 @@ function getImageUri(src?: ImageSourcePropType): string | null {
 
 function parseColor(color?: string | null): string | null | undefined | number {
     if (color && Platform.OS === 'ios')
+        // TODO:
+        // @ts-ignore
         return processColor(color);
     return color;
 }
