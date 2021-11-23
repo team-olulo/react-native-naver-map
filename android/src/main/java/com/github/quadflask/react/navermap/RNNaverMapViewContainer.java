@@ -63,7 +63,7 @@ public class RNNaverMapViewContainer extends FrameLayout implements RNNaverMapVi
                         break;
                 }
             }
-        } catch(NullPointerException e) { }
+        } catch(Exception e) { }
 
         return super.dispatchTouchEvent(ev);
     }
