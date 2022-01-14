@@ -11,7 +11,10 @@ import com.airbnb.android.react.maps.ViewAttacherGroup2;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.naver.maps.geometry.LatLng;
@@ -287,16 +290,8 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         param.putDouble("longitude", cameraPosition.target.longitude);
         param.putDouble("zoom", cameraPosition.zoom);
         param.putDouble("heading", cameraPosition.bearing);
-
-        LatLngBounds coveringBounds = naverMap.getCoveringBounds();
-        param.putDouble("lt0", coveringBounds.getNorthWest().latitude);
-        param.putDouble("lt1", coveringBounds.getNorthWest().longitude);
-        param.putDouble("rt0", coveringBounds.getNorthEast().latitude);
-        param.putDouble("rt1", coveringBounds.getNorthEast().longitude);
-        param.putDouble("rb0", coveringBounds.getSouthEast().latitude);
-        param.putDouble("rb1", coveringBounds.getSouthEast().longitude);
-        param.putDouble("lb0", coveringBounds.getSouthWest().latitude);
-        param.putDouble("lb1", coveringBounds.getSouthWest().longitude);
+        param.putArray("contentRegion", ReactUtil.toWritableArray(naverMap.getContentRegion()));
+        param.putArray("coveringRegion", ReactUtil.toWritableArray(naverMap.getCoveringRegion()));
 
         emitEvent("onCameraChange", param);
     }
