@@ -12,6 +12,7 @@
 #import <NMapsMap/NMFNaverMapView.h>
 #import <NMapsMap/NMFCameraUpdate.h>
 #import <NMapsMap/NMFCameraPosition.h>
+#import <NMapsMap/NMFProjection.h>
 #import <NMapsMap/NMGLatLng.h>
 
 #import "RCTConvert+NMFMapView.h"
@@ -279,6 +280,26 @@ RCT_EXPORT_METHOD(animateToRegion:(nonnull NSNumber *)reactTag
                                        padding: 0.0f];
       cameraUpdate.animation = NMFCameraUpdateAnimationEaseIn;
       [((RNNaverMapView *)view).mapView moveCamera: cameraUpdate];
+    }
+  }];
+}
+
+RCT_EXPORT_METHOD(getMetersPerDp: (nonnull NSNumber *)reactTag
+                  latitude: (double)latitude
+                               zoom: (double) zoom
+                                getMetersPerDpWithResolver: (RCTPromiseResolveBlock)resolve
+                               rejecter:(RCTPromiseRejectBlock)reject)
+{
+  [self.bridge.uiManager addUIBlock:^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    id view = viewRegistry[reactTag];
+    if (![view isKindOfClass:[RNNaverMapView class]]) {
+      RCTLogError(@"Invalid view returned from registry, expecting NMFMapView, got: %@", view);
+    } else {
+        NMFMapView *mapView = ((RNNaverMapView *)view).mapView;
+        NMFProjection *projection = mapView.projection;
+        NSNumber *meters = [NSNumber numberWithDouble: [projection metersPerPixelAtLatitude: latitude zoom: zoom]];
+        
+        resolve(meters);
     }
   }];
 }

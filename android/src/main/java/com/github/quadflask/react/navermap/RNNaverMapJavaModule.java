@@ -1,7 +1,9 @@
 package com.github.quadflask.react.navermap;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
 
 public class RNNaverMapJavaModule extends ReactContextBaseJavaModule {
 
@@ -14,6 +16,11 @@ public class RNNaverMapJavaModule extends ReactContextBaseJavaModule {
     @Override
     public String getName() {
         return REACT_CLASS;
+    }
+
+    @ReactMethod
+    public void getMetersPerDp(final double latitude, final double zoom, final Promise promise) {
+        promise.resolve(RNNaverMapViewContainer.getMetersPerDp(latitude, zoom));
     }
 }
 

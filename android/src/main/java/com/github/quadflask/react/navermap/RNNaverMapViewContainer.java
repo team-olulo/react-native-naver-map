@@ -16,6 +16,7 @@ import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
+import com.naver.maps.map.Projection;
 import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.util.FusedLocationSource;
 
@@ -298,5 +299,9 @@ public class RNNaverMapViewContainer extends FrameLayout implements RNNaverMapVi
         if (mapView != null)
             return mapView.getFeatureAt(index);
         return null;
+    }
+
+    public static double getMetersPerDp(double latitude, double zoom) {
+        return RNNaverMapView.getMetersPerDp(latitude, zoom);
     }
 }
