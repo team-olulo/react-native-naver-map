@@ -327,4 +327,8 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
     public NaverMap getMap() {
         return naverMap;
     }
+
+    public static double getMetersPerDp(double latitude, double zoom) {
+        return Projection.getMetersPerDp(latitude, zoom);
+    }
 }

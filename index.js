@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { findNodeHandle, Image, NativeModules, Platform, processColor, requireNativeComponent, UIManager, } from 'react-native';
 const RNNaverMapView = requireNativeComponent('RNNaverMapView');
+const RNNaverMapViewModule = NativeModules?.RNNaverMapView
 // @ts-ignore
 const RNNaverMapViewTexture = Platform.select({
     android: () => requireNativeComponent('RNNaverMapViewTexture'),
@@ -107,6 +108,14 @@ export default class NaverMapView extends Component {
         };
         this.handleOnCameraChange = (event) => this.props.onCameraChange && this.props.onCameraChange(event.nativeEvent);
         this.handleOnMapClick = (event) => this.props.onMapClick && this.props.onMapClick(event.nativeEvent);
+        this.getMetersPerDp = async (latitude, zoom) => {
+            const _getMetersPerDp = Platform.select({ 
+                android: () => RNNaverMapViewModule?.getMetersPerDp(latitude, zoom), 
+                ios: () => RNNaverMapViewModule?.getMetersPerDp(this.nodeHandle, latitude, zoom)  
+            })
+    
+            return _getMetersPerDp()
+        };
     }
     render() {
         const { onInitialized, center, tilt, bearing, mapPadding, logoMargin, nightMode, useTextureView, } = this.props;

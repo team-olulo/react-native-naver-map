@@ -1,5 +1,7 @@
 import React, {Component, SyntheticEvent} from 'react';
 import {findNodeHandle, Image, ImageSourcePropType, NativeModules, Platform, processColor, requireNativeComponent, StyleProp, UIManager, ViewStyle,} from 'react-native';
+// import { NativeModules } from 'react-native';
+// module.exports = NativeModules.ToastExample;
 
 const RNNaverMapView = requireNativeComponent('RNNaverMapView');
 // @ts-ignore
@@ -123,6 +125,8 @@ export interface NaverMapViewProps {
     useTextureView?: boolean;
 }
 
+const RNNaverMapViewModule = NativeModules?.RNNaverMapView
+
 export default class NaverMapView extends Component<NaverMapViewProps, {}> {
     ref?: RNNaverMapView;
     nodeHandle?: null | number;
@@ -131,6 +135,15 @@ export default class NaverMapView extends Component<NaverMapViewProps, {}> {
         this.ref = ref;
         this.nodeHandle = findNodeHandle(ref);
     };
+
+    getMetersPerDp = async (latitude: number, zoom: number): Promise<number> => {
+        const _getMetersPerDp = Platform.select({ 
+            android: () => RNNaverMapViewModule?.getMetersPerDp(latitude, zoom), 
+            ios: () => RNNaverMapViewModule?.getMetersPerDp(this.nodeHandle, latitude, zoom)  
+        })
+
+        return _getMetersPerDp()
+    }
 
     animateToCoordinate = (coord: Coord) => {
         this.dispatchViewManagerCommand('animateToCoordinate', [coord]);
