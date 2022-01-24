@@ -125,7 +125,7 @@ export interface NaverMapViewProps {
     useTextureView?: boolean;
 }
 
-const RNNaverMapViewModule = NativeModules?.RNNaverMapView
+const RNNaverMapViewModule = NativeModules.RNNaverMapView
 
 export default class NaverMapView extends Component<NaverMapViewProps, {}> {
     ref?: RNNaverMapView;
@@ -142,7 +142,7 @@ export default class NaverMapView extends Component<NaverMapViewProps, {}> {
             ios: () => RNNaverMapViewModule?.getMetersPerDp(this.nodeHandle, latitude, zoom)  
         })
 
-        return _getMetersPerDp()
+        return _getMetersPerDp?.() ?? 1
     }
 
     animateToCoordinate = (coord: Coord) => {
