@@ -20,6 +20,8 @@
 @property (nonatomic, assign) NSArray<NMGLatLng *> *coordinates;
 @property (nonatomic, assign) CGFloat strokeWidth;
 @property (nonatomic, strong) UIColor *strokeColor;
+@property (nonatomic, strong) NSArray<NSNumber *> *pattern;
+@property (nonatomic, assign) NMFOverlayLineCap capType;
 @property (nonatomic, copy) RCTDirectEventBlock onClick;
 
 @end

@@ -34,6 +34,8 @@ RCT_CUSTOM_VIEW_PROPERTY(coordinates, NSArray<NMGLatLng*>, RNNaverMapPolylineOve
 }
 RCT_EXPORT_VIEW_PROPERTY(strokeWidth, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(pattern, NSNumberArray)
+RCT_EXPORT_VIEW_PROPERTY(capType, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(onClick, RCTDirectEventBlock)
 
 @end
