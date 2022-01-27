@@ -53,4 +53,8 @@
   _realOverlay.fillColor = color;
 }
 
+- (void)setZIndex:(int*) zIndex {
+  _realOverlay.zIndex = zIndex;
+}
+
 @end
