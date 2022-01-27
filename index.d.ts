@@ -55,6 +55,11 @@ export declare enum Align {
     BottomRight = 7,
     BottomLeft = 8
 }
+export declare enum LineCap {
+    Round = 0 ,
+    Butt = 1,
+    Square = 2,
+}
 export interface Rect {
     left?: number;
     top?: number;
@@ -217,6 +222,8 @@ interface PolylineProps extends Omit<MapOverlay, "coordinate"> {
     coordinates: Coord[];
     strokeWidth?: number;
     strokeColor?: string;
+    pattern?: number[];
+    capType?: LineCap;
 }
 export declare class Polyline extends Component<PolylineProps> {
     render(): JSX.Element;
