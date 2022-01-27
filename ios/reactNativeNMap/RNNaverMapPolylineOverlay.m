@@ -47,4 +47,12 @@
   _realOverlay.color = strokeColor;
 }
 
+- (void)setPattern:(NSArray<NSNumber *> *_Nonnull) pattern {
+  _realOverlay.pattern = pattern;
+}
+
+- (void)setCapType:(NMFOverlayLineCap) capType {
+  _realOverlay.capType = capType;
+}
+
 @end
