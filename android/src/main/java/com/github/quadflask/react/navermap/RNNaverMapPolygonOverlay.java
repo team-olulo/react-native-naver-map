@@ -41,4 +41,8 @@ public class RNNaverMapPolygonOverlay extends ClickableRNNaverMapFeature<Polygon
     public void setHoles(List<List<LatLng>> holes) {
         feature.setHoles(holes);
     }
+
+    public void setZIndex(int zIndex) {
+        feature.setZIndex(zIndex);
+    }
 }

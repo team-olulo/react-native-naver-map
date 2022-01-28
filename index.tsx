@@ -348,6 +348,7 @@ interface PolygonProps extends Omit<MapOverlay, "coordinate"> {
     outlineColor?: string
     color?: string;
     holes?: Coord[][];
+    zIndex?: number;
 }
 
 export class Polygon extends Component<PolygonProps> {

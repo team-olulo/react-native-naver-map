@@ -54,5 +54,6 @@ RCT_EXPORT_VIEW_PROPERTY(outlineWidth, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(color, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(outlineColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(onClick, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(zIndex, int)
 
 @end
