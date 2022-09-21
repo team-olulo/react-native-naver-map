@@ -36,10 +36,12 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.Align;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> implements TrackableView {
@@ -47,6 +49,9 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
     private boolean animated = false;
     private int duration = 500;
     private TimeInterpolator easingFunction;
+
+    private InfoWindow infoWindow;
+    private boolean isInfoWindowVisible = false;
 
     public RNNaverMapMarker(EventEmittable emitter, Context context) {
         super(emitter, context);
@@ -158,6 +163,39 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
 
     public void removeCaption() {
         feature.setCaptionText("");
+    }
+
+    public void setInfoWindow(String text, boolean visible) {
+        if (this.infoWindow == null) {
+            this.infoWindow = new InfoWindow();
+        }
+
+        this.infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this.getContext()) {
+            @NonNull
+            @Override
+            public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                return text;
+            }
+        });
+
+        isInfoWindowVisible = visible;
+        if (visible) {
+            this.infoWindow.open(feature);
+        }
+    }
+
+    public void removeInfoWindow() {
+        if (this.infoWindow == null) return;
+
+        this.infoWindow.close();
+        this.infoWindow = null;
+        isInfoWindowVisible = false;
+    }
+
+    public void openInfo() {
+        if (this.infoWindow == null) return;
+
+        this.infoWindow.close();
     }
 
     public void setImage(String uri) {
@@ -291,6 +329,15 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
         if (getChildCount() == 0 && customView != null) {
             customView = null;
             updateCustomView();
+        }
+    }
+
+    @Override
+    public void onFeatureAppended() {
+        super.onFeatureAppended();
+
+        if (this.isInfoWindowVisible && this.infoWindow != null) {
+            this.infoWindow.open(this.feature);
         }
     }
 }

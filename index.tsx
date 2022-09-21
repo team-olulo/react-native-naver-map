@@ -292,6 +292,10 @@ export interface MarkerProps extends MapOverlay {
         minZoom?: number;
         maxZoom?: number;
     };
+    info?: {
+        text?: string;
+        visible?: boolean;
+    };
     style?: StyleProp<ViewStyle>;
 }
 
