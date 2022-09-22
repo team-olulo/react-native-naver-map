@@ -11,10 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.naver.maps.map.overlay.Align;
+import com.naver.maps.map.overlay.InfoWindow;
 
 import static com.github.quadflask.react.navermap.ReactUtil.parseAlign;
 import static com.github.quadflask.react.navermap.ReactUtil.parseColorString;
@@ -24,6 +27,10 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
     private static final Align DEFAULT_CAPTION_ALIGN = Align.Bottom;
 
     private final DisplayMetrics metrics;
+
+    private static final int FUNC_OPEN_INFO_WINDOW = 1;
+
+    private boolean isInfoWindowVisible = true;
 
     public RNNaverMapMarkerManager(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -141,6 +148,35 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
         view.setCaption(text, textSize, color, haloColor, align);
     }
 
+    @ReactProp(name = "info")
+    public void setInfo(RNNaverMapMarker view, ReadableMap map) {
+        if (map == null || !map.hasKey("text")) {
+            view.removeInfoWindow();
+            return;
+        }
+
+        String text = map.getString("text");
+        boolean isVisible = map.hasKey("visible") ? map.getBoolean("visible") : isInfoWindowVisible;
+
+        view.setInfoWindow(text ,isVisible);
+    }
+
+    @Override
+    public java.util.Map<String, Integer> getCommandsMap() {
+        return MapBuilder.<String, Integer>builder()
+                .put("openInfo", FUNC_OPEN_INFO_WINDOW)
+                .build();
+    }
+
+    @Override
+    public void receiveCommand(@NonNull RNNaverMapMarker view, int commandId, @Nullable ReadableArray args) {
+        switch (commandId) {
+            case FUNC_OPEN_INFO_WINDOW:
+                view.openInfo();
+                break;
+        }
+    }
+
     @Override
     public void addView(RNNaverMapMarker parent, View child, int index) {
         parent.setCustomView(child, index);
@@ -148,6 +184,7 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
 
     @Override
     public void removeView(RNNaverMapMarker parent, View view) {
+        parent.removeInfoWindow();
         parent.removeCustomView(view);
     }
 }

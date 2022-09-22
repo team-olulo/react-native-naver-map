@@ -46,6 +46,7 @@
   if ([subview isKindOfClass:[RNNaverMapMarker class]]) {
     RNNaverMapMarker *marker = (RNNaverMapMarker*)subview;
     marker.realMarker.mapView = self.mapView;
+    [marker didAppearOnMap];
   } else if ([subview isKindOfClass:[RNNaverMapPolylineOverlay class]]) {
     RNNaverMapPolylineOverlay *overlay = (RNNaverMapPolylineOverlay*)subview;
     overlay.realOverlay.mapView = self.mapView;
