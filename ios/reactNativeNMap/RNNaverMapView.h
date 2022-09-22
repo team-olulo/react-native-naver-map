@@ -29,4 +29,6 @@
 @property (nonatomic, assign) BOOL zoomEnabled;
 @property (nonatomic, assign) BOOL showsMyLocationButton;
 
+- (void)onMapSetup;
+
 @end

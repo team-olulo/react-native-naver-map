@@ -33,6 +33,8 @@
 @property (nonatomic, strong) UIColor *pinColor;
 @property (nonatomic, assign) CGFloat alpha;
 @property (nonatomic, assign) CGPoint anchor;
+@property (nonatomic, strong) NMFInfoWindow *realInfoWindow;
+@property (nonatomic, assign) BOOL isInfoWIndowVisible;
 @property (nonatomic, copy) RCTDirectEventBlock onClick;
 
 - (void)setCaptionText:(NSString *) text;
@@ -51,4 +53,8 @@
 - (void)setSubCaptionRequestedWidth:(CGFloat) subCaptionWidth;
 - (void)setSubCaptionMinZoom:(double) subMinZoom;
 - (void)setSubCaptionMaxZoom:(double) subMaxZoom;
+- (void)setInfoWindowText:(NSString *) text;
+- (void)setInfoWindowVisible:(BOOL) visible;
+
+- (void)didAppearOnMap;
 @end
