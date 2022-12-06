@@ -194,6 +194,14 @@
         
         _realInfoWindow.dataSource = dataSource;
 
+        __block RNNaverMapMarker *this = self;
+        _realInfoWindow.touchHandler = ^BOOL(NMFOverlay *overlay) {
+          if (this.onClick != nil) {
+            this.onClick(@{});
+            return YES;
+          }
+          return NO;
+        };
     } else {
         NMFInfoWindowDefaultTextSource *dataSource = _realInfoWindow.dataSource;
         dataSource.title = text;
