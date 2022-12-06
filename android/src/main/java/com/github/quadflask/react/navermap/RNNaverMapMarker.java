@@ -168,6 +168,7 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
     public void setInfoWindow(String text, boolean visible) {
         if (this.infoWindow == null) {
             this.infoWindow = new InfoWindow();
+            this.infoWindow.setOnClickListener(this);
         }
 
         this.infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this.getContext()) {
@@ -180,7 +181,7 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
 
         isInfoWindowVisible = visible;
         if (visible) {
-            this.infoWindow.open(feature);
+            this.openInfo();
         }
     }
 
@@ -188,6 +189,7 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
         if (this.infoWindow == null) return;
 
         this.infoWindow.close();
+        this.infoWindow.setOnClickListener(null);
         this.infoWindow = null;
         isInfoWindowVisible = false;
     }
@@ -195,7 +197,7 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
     public void openInfo() {
         if (this.infoWindow == null) return;
 
-        this.infoWindow.close();
+        this.infoWindow.open(feature);
     }
 
     public void setImage(String uri) {
