@@ -7,6 +7,7 @@
 
 #import "RNNaverMapMarkerManager.h"
 #import "RNNaverMapMarker.h"
+
 #import <React/RCTUIManager.h>
 #import <NMapsMap/NMGLatLng.h>
 #import <NMapsMap/NMFCameraCommon.h>
@@ -72,14 +73,50 @@ RCT_CUSTOM_VIEW_PROPERTY(subCaption, NSDictionary, RNNaverMapMarker)
 
 RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
 {
+    BOOL isInfoWindowExist = view.infoWindow != nil;
+    
   NSDictionary *dic = [RCTConvert NSDictionary:json];
+    
+  BOOL visible = [RCTConvert BOOL:dic[@"visible"]];
   NSString *text = [RCTConvert NSString:dic[@"text"]];
-  if (!text || [text length] <= 0) return;
-      
-  bool visible = [RCTConvert BOOL:dic[@"visible"]];
+  CGFloat textSize = [RCTConvert CGFloat:dic[@"textSize"]];
+  UIColor *color = [RCTConvert UIColor:dic[@"color"]];
+  BOOL multiline = [RCTConvert BOOL:dic[@"multiline"]];
+  UIColor *backgroundColor = [RCTConvert UIColor:dic[@"backgroundColor"]];
+  CGFloat maxWidth = [RCTConvert CGFloat:dic[@"maxWidth"]];
+  CGFloat paddingHorizental = [RCTConvert CGFloat:dic[@"paddingHorizental"]];
+  CGFloat paddingVertical = [RCTConvert CGFloat:dic[@"paddingVertical"]];
+  CGFloat cornerRadius = [RCTConvert CGFloat:dic[@"cornerRadius"]];
+    
+    if(!visible && !isInfoWindowExist) {
+        return;
+    }
+    
+    RNNaverMapInfoWindow *infoWindow = isInfoWindowExist ? view.infoWindow : [[RNNaverMapInfoWindow alloc] initWithMarker: view];
 
-  [view setInfoWindowText: text];
-  [view setInfoWindowVisible: visible];
+    [infoWindow setIsVisible:visible];
+    [infoWindow setText: text];
+    [infoWindow setTextSize: textSize];
+    [infoWindow setColor: color];
+    [infoWindow setMultiline: multiline];
+    [infoWindow setBackgroundColor: backgroundColor];
+    [infoWindow setMaxWidth: maxWidth];
+    [infoWindow setPaddingHorizental: paddingHorizental];
+    [infoWindow setPaddingVertical: paddingVertical];
+    [infoWindow setCornerRadius: cornerRadius];
+    
+  if (isInfoWindowExist) {
+      if (!infoWindow.isVisible && visible) {
+          [infoWindow open];
+      } else if(infoWindow.isVisible && !visible) {
+          [infoWindow close];
+      } else {
+          [infoWindow refresh];
+      }
+      return;
+  }
+
+  [view setInfoWindow: infoWindow];
 }
 
 RCT_EXPORT_VIEW_PROPERTY(coordinate, NMGLatLng)

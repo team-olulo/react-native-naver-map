@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BEE958B329407EEF00AF1BF9 /* RNNaverMapInfoWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE958B229407EEF00AF1BF9 /* RNNaverMapInfoWindow.m */; };
 		CD13A888241FE35100153B95 /* RNNaverMapCircleOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = CD13A887241FE35100153B95 /* RNNaverMapCircleOverlay.m */; };
 		CD13A88B241FE36100153B95 /* RNNaverMapCircleOverlayManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CD13A88A241FE36100153B95 /* RNNaverMapCircleOverlayManager.m */; };
 		CDD22144242CBFDC004F9706 /* RNNaverMapPolygonOverlay.m in Sources */ = {isa = PBXBuildFile; fileRef = CDD22143242CBFDC004F9706 /* RNNaverMapPolygonOverlay.m */; };
@@ -35,6 +36,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BEE958B129407EEF00AF1BF9 /* RNNaverMapInfoWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNNaverMapInfoWindow.h; sourceTree = "<group>"; };
+		BEE958B229407EEF00AF1BF9 /* RNNaverMapInfoWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNNaverMapInfoWindow.m; sourceTree = "<group>"; };
 		CD13A886241FE33B00153B95 /* RNNaverMapCircleOverlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNaverMapCircleOverlay.h; sourceTree = "<group>"; };
 		CD13A887241FE35100153B95 /* RNNaverMapCircleOverlay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNNaverMapCircleOverlay.m; sourceTree = "<group>"; };
 		CD13A889241FE35A00153B95 /* RNNaverMapCircleOverlayManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNNaverMapCircleOverlayManager.h; sourceTree = "<group>"; };
@@ -101,6 +104,8 @@
 				CD13A88A241FE36100153B95 /* RNNaverMapCircleOverlayManager.m */,
 				CDD8600C232641F5007D13B3 /* RNNaverMapMarker.h */,
 				CDD8600B232641F5007D13B3 /* RNNaverMapMarker.m */,
+				BEE958B129407EEF00AF1BF9 /* RNNaverMapInfoWindow.h */,
+				BEE958B229407EEF00AF1BF9 /* RNNaverMapInfoWindow.m */,
 				CDD86014232641F5007D13B3 /* RNNaverMapMarkerManager.h */,
 				CDD8600A232641F5007D13B3 /* RNNaverMapMarkerManager.m */,
 				CDD8600D232641F5007D13B3 /* RNNaverMapPathOverlay.h */,
@@ -181,6 +186,7 @@
 				CD13A888241FE35100153B95 /* RNNaverMapCircleOverlay.m in Sources */,
 				CDD22144242CBFDC004F9706 /* RNNaverMapPolygonOverlay.m in Sources */,
 				CDD8601C232641F6007D13B3 /* RNNaverMapMarker.m in Sources */,
+				BEE958B329407EEF00AF1BF9 /* RNNaverMapInfoWindow.m in Sources */,
 				CDD2214A242CC16B004F9706 /* RNNaverMapPolygonOverlayManager.m in Sources */,
 				CDD8601B232641F6007D13B3 /* RNNaverMapMarkerManager.m in Sources */,
 				CD13A88B241FE36100153B95 /* RNNaverMapCircleOverlayManager.m in Sources */,

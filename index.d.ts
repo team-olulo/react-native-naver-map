@@ -55,11 +55,6 @@ export declare enum Align {
     BottomRight = 7,
     BottomLeft = 8
 }
-export declare enum LineCap {
-    Round = 0 ,
-    Butt = 1,
-    Square = 2,
-}
 export interface Rect {
     left?: number;
     top?: number;
@@ -115,6 +110,7 @@ export default class NaverMapView extends Component<NaverMapViewProps, {}> {
     ref?: RNNaverMapView;
     nodeHandle?: null | number;
     private resolveRef;
+    getMetersPerDp: (latitude: number, zoom: number) => Promise<number>;
     animateToCoordinate: (coord: Coord) => void;
     animateToPosition: (coord: Coord, zoom: number) => void;
     animateToTwoCoordinates: (c1: Coord, c2: Coord) => void;
@@ -133,6 +129,7 @@ export default class NaverMapView extends Component<NaverMapViewProps, {}> {
         latitude: number;
         longitude: number;
         zoom: number;
+        heading: number;
         contentsRegion: [Coord, Coord, Coord, Coord, Coord];
         coveringRegion: [Coord, Coord, Coord, Coord, Coord];
     }>) => void;
@@ -191,6 +188,18 @@ export interface MarkerProps extends MapOverlay {
         minZoom?: number;
         maxZoom?: number;
     };
+    info?: {
+        visible?: boolean;
+        text?: string;
+        textSize?: number;
+        color?: string;
+        multiline?: boolean;
+        backgroundColor?: string;
+        maxWidth?: number;
+        paddingHorizental?: number;
+        paddingVertical?: number;
+        cornerRadius: number;
+    };
     style?: StyleProp<ViewStyle>;
 }
 export declare class Marker extends Component<MarkerProps> {
@@ -210,8 +219,6 @@ interface PolylineProps extends Omit<MapOverlay, "coordinate"> {
     coordinates: Coord[];
     strokeWidth?: number;
     strokeColor?: string;
-    pattern?: number[];
-    capType?: LineCap;
 }
 export declare class Polyline extends Component<PolylineProps> {
     render(): JSX.Element;
@@ -222,6 +229,7 @@ interface PolygonProps extends Omit<MapOverlay, "coordinate"> {
     outlineColor?: string;
     color?: string;
     holes?: Coord[][];
+    zIndex?: number;
 }
 export declare class Polygon extends Component<PolygonProps> {
     render(): JSX.Element;
