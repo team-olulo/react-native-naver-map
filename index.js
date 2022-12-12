@@ -1,7 +1,17 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import React, { Component } from 'react';
 import { findNodeHandle, Image, NativeModules, Platform, processColor, requireNativeComponent, UIManager, } from 'react-native';
+// import { NativeModules } from 'react-native';
+// module.exports = NativeModules.ToastExample;
 const RNNaverMapView = requireNativeComponent('RNNaverMapView');
-const RNNaverMapViewModule = NativeModules.RNNaverMapView
 // @ts-ignore
 const RNNaverMapViewTexture = Platform.select({
     android: () => requireNativeComponent('RNNaverMapViewTexture'),
@@ -63,6 +73,7 @@ export var Align;
     Align[Align["BottomRight"] = 7] = "BottomRight";
     Align[Align["BottomLeft"] = 8] = "BottomLeft";
 })(Align || (Align = {}));
+const RNNaverMapViewModule = NativeModules.RNNaverMapView;
 export default class NaverMapView extends Component {
     constructor() {
         super(...arguments);
@@ -70,6 +81,14 @@ export default class NaverMapView extends Component {
             this.ref = ref;
             this.nodeHandle = findNodeHandle(ref);
         };
+        this.getMetersPerDp = (latitude, zoom) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const _getMetersPerDp = Platform.select({
+                android: () => RNNaverMapViewModule === null || RNNaverMapViewModule === void 0 ? void 0 : RNNaverMapViewModule.getMetersPerDp(latitude, zoom),
+                ios: () => RNNaverMapViewModule === null || RNNaverMapViewModule === void 0 ? void 0 : RNNaverMapViewModule.getMetersPerDp(this.nodeHandle, latitude, zoom)
+            });
+            return (_a = _getMetersPerDp === null || _getMetersPerDp === void 0 ? void 0 : _getMetersPerDp()) !== null && _a !== void 0 ? _a : 1;
+        });
         this.animateToCoordinate = (coord) => {
             this.dispatchViewManagerCommand('animateToCoordinate', [coord]);
         };
@@ -95,12 +114,16 @@ export default class NaverMapView extends Component {
             this.dispatchViewManagerCommand('showsMyLocationButton', [show]);
         };
         this.dispatchViewManagerCommand = (command, arg) => {
+            // TODO:
             // @ts-ignore
             return Platform.select({
+                // TODO:
                 // @ts-ignore
                 android: () => UIManager.dispatchViewManagerCommand(
+                // TODO:
                 // @ts-ignore
-                this.nodeHandle,
+                this.nodeHandle, 
+                // TODO:
                 // @ts-ignore
                 UIManager.getViewManagerConfig('RNNaverMapView').Commands[command], arg),
                 ios: () => NativeModules[`RNNaverMapView`][command](this.nodeHandle, ...arg),
@@ -108,25 +131,26 @@ export default class NaverMapView extends Component {
         };
         this.handleOnCameraChange = (event) => this.props.onCameraChange && this.props.onCameraChange(event.nativeEvent);
         this.handleOnMapClick = (event) => this.props.onMapClick && this.props.onMapClick(event.nativeEvent);
-        this.getMetersPerDp = async (latitude, zoom) => {
-            const _getMetersPerDp = Platform.select({ 
-                android: () => RNNaverMapViewModule?.getMetersPerDp(latitude, zoom), 
-                ios: () => RNNaverMapViewModule?.getMetersPerDp(this.nodeHandle, latitude, zoom)  
-            })
-    
-            return _getMetersPerDp?.() ?? 1
-        };
     }
     render() {
         const { onInitialized, center, tilt, bearing, mapPadding, logoMargin, nightMode, useTextureView, } = this.props;
         const ViewClass = useTextureView ? RNNaverMapViewTexture : RNNaverMapView;
-        return React.createElement(ViewClass, Object.assign({ ref: this.resolveRef }, this.props, { onInitialized: onInitialized, center: center, mapPadding: mapPadding, logoMargin: logoMargin, tilt: tilt, bearing: bearing, nightMode: nightMode, onCameraChange: this.handleOnCameraChange, onMapClick: this.handleOnMapClick }));
+        return React.createElement(ViewClass
+        // TODO:
+        // @ts-ignore
+        , Object.assign({ 
+            // TODO:
+            // @ts-ignore
+            ref: this.resolveRef }, this.props, { onInitialized: onInitialized, center: center, mapPadding: mapPadding, logoMargin: logoMargin, tilt: tilt, bearing: bearing, nightMode: nightMode, onCameraChange: this.handleOnCameraChange, onMapClick: this.handleOnMapClick }));
     }
 }
 export class Marker extends Component {
     render() {
         var _a, _b;
-        return React.createElement(RNNaverMapMarker, Object.assign({}, this.props, { image: getImageUri(this.props.image), caption: this.props.caption && Object.assign(Object.assign({}, this.props.caption), { textSize: (_a = this.props.caption.textSize) !== null && _a !== void 0 ? _a : 12, color: parseColor(this.props.caption.color), haloColor: parseColor(this.props.caption.haloColor) }), subCaption: this.props.subCaption && Object.assign(Object.assign({}, this.props.subCaption), { textSize: (_b = this.props.subCaption.textSize) !== null && _b !== void 0 ? _b : 12, color: parseColor(this.props.subCaption.color), haloColor: parseColor(this.props.subCaption.haloColor) }) }));
+        return React.createElement(RNNaverMapMarker, Object.assign({}, this.props, { 
+            // TODO
+            // @ts-ignore
+            image: getImageUri(this.props.image), caption: this.props.caption && Object.assign(Object.assign({}, this.props.caption), { textSize: (_a = this.props.caption.textSize) !== null && _a !== void 0 ? _a : 12, color: parseColor(this.props.caption.color), haloColor: parseColor(this.props.caption.haloColor) }), subCaption: this.props.subCaption && Object.assign(Object.assign({}, this.props.subCaption), { textSize: (_b = this.props.subCaption.textSize) !== null && _b !== void 0 ? _b : 12, color: parseColor(this.props.subCaption.color), haloColor: parseColor(this.props.subCaption.haloColor) }), info: this.props.info && Object.assign(Object.assign({}, this.props.info), { color: parseColor(this.props.info.color), backgroundColor: parseColor(this.props.info.backgroundColor) }) }));
     }
 }
 export class Circle extends Component {
@@ -144,7 +168,10 @@ export class Polygon extends Component {
         // @ts-ignore
         return Platform.select({
             android: () => React.createElement(RNNaverMapPolygonOverlay, Object.assign({}, this.props)),
-            ios: () => React.createElement(RNNaverMapPolygonOverlay, Object.assign({}, this.props, { coordinates: {
+            ios: () => React.createElement(RNNaverMapPolygonOverlay, Object.assign({}, this.props, { 
+                // TODO:
+                // @ts-ignore
+                coordinates: {
                     exteriorRing: this.props.coordinates,
                     interiorRings: this.props.holes,
                 } }))
@@ -153,7 +180,10 @@ export class Polygon extends Component {
 }
 export class Path extends Component {
     render() {
-        return React.createElement(RNNaverMapPathOverlay, Object.assign({}, this.props, { pattern: getImageUri(this.props.pattern) }));
+        return React.createElement(RNNaverMapPathOverlay, Object.assign({}, this.props, { 
+            // TODO:
+            // @ts-ignore
+            pattern: getImageUri(this.props.pattern) }));
     }
 }
 function getImageUri(src) {
@@ -166,6 +196,8 @@ function getImageUri(src) {
 }
 function parseColor(color) {
     if (color && Platform.OS === 'ios')
+        // TODO:
+        // @ts-ignore
         return processColor(color);
     return color;
 }

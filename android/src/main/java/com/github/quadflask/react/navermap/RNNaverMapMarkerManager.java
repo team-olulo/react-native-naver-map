@@ -30,8 +30,6 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
 
     private static final int FUNC_OPEN_INFO_WINDOW = 1;
 
-    private boolean isInfoWindowVisible = true;
-
     public RNNaverMapMarkerManager(ReactApplicationContext reactContext) {
         super(reactContext);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -155,10 +153,48 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
             return;
         }
 
-        String text = map.getString("text");
-        boolean isVisible = map.hasKey("visible") ? map.getBoolean("visible") : isInfoWindowVisible;
+        boolean isVisible = map.hasKey("visible") ? map.getBoolean("visible") : true;
+        String text = map.hasKey("text") ? map.getString("text") : null;
+        Double textSize = map.hasKey("textSize") ? map.getDouble("textSize") : null;
+        int color = map.hasKey("color") ? parseColorString(map.getString("color")) : null;
+        boolean multiline = map.hasKey("multiline") ? map.getBoolean("multiline") : false;
+        int maxWidth = map.hasKey("maxWidth") ? map.getInt("maxWidth") : null;
+        int backgroundColor = map.hasKey("backgroundColor") ? parseColorString(map.getString("backgroundColor")) : null;
+        int paddingHorizental = map.hasKey("paddingHorizental") ? map.getInt("paddingHorizental") : 0;
+        int paddingVertical = map.hasKey("paddingVertical") ? map.getInt("paddingVertical") : 0;
+        int cornerRadius = map.hasKey("cornerRadius") ? map.getInt("cornerRadius") : 8;
 
-        view.setInfoWindow(text ,isVisible);
+        RNNaverMapInfoWindow infoWindow = view.getInfoWindow();
+        boolean hasInfoWindow = false;
+        if (infoWindow == null) {
+            infoWindow = new RNNaverMapInfoWindow(view);
+        } else {
+            hasInfoWindow = true;
+        }
+
+        infoWindow.setIsVisible(isVisible)
+                .setText(text)
+                .setTextSize(textSize)
+                .setColor(color)
+                .setMultiline(multiline)
+                .setBackgroundColor(backgroundColor)
+                .setMaxWidth(maxWidth)
+                .setPaddingHorizental(paddingHorizental)
+                .setPaddingVertical(paddingVertical)
+                .setCornerRadius(cornerRadius);
+
+        if (hasInfoWindow) {
+            if (isVisible && !infoWindow.isVisible) {
+                infoWindow.open();
+            } else if (infoWindow.isVisible && !isVisible) {
+                infoWindow.close();
+            } else {
+                infoWindow.refresh();
+            }
+            return;
+        }
+
+        view.setInfoWindow(infoWindow);
     }
 
     @Override

@@ -185,47 +185,17 @@
 
  __block RNNaverMapMarker *this = self;
  */
-
-- (NMFInfoWindow *)createInfoWindow:(NSString *) text {
-    if (!_realInfoWindow) {
-        _realInfoWindow = [NMFInfoWindow new];
-        NMFInfoWindowDefaultTextSource *dataSource = [NMFInfoWindowDefaultTextSource dataSource];
-        dataSource.title = text;
-        
-        _realInfoWindow.dataSource = dataSource;
-
-        __block RNNaverMapMarker *this = self;
-        _realInfoWindow.touchHandler = ^BOOL(NMFOverlay *overlay) {
-          if (this.onClick != nil) {
-            this.onClick(@{});
-            return YES;
-          }
-          return NO;
-        };
-    } else {
-        NMFInfoWindowDefaultTextSource *dataSource = _realInfoWindow.dataSource;
-        dataSource.title = text;
-    }
-        
-    return _realInfoWindow;
-}
-
-- (void)setInfoWindowText:(NSString *) text {
-    [self createInfoWindow: text];
+- (void)setInfoWindow:(RNNaverMapInfoWindow *)infoWindow {
+    _infoWindow = infoWindow;
     
-    if (!_isInfoWIndowVisible) return
-        
-        [_realInfoWindow openWithMarker: _realMarker];
+    if (_infoWindow.isVisible) {
+        [_infoWindow open];
+    }
 }
 
-- (void)setInfoWindowVisible:(BOOL) visible {
-    _isInfoWIndowVisible = visible;
-    if (!_realInfoWindow) return;
-    if (visible) {
-        [_realInfoWindow openWithMarker: _realMarker];
-    } else {
-        [_realInfoWindow close];
-    }
+- (void)openInfo {
+    if(!_infoWindow) return;
+    [_infoWindow open];
 }
 
 - (void)setImage:(NSString *) image
@@ -272,7 +242,7 @@
 }
 
 - (void) didAppearOnMap {
-    [self setInfoWindowVisible: _isInfoWIndowVisible];
+    [self setInfoWindow: _infoWindow];
 }
 
 @end

@@ -50,8 +50,11 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
     private int duration = 500;
     private TimeInterpolator easingFunction;
 
-    private InfoWindow infoWindow;
-    private boolean isInfoWindowVisible = false;
+    private RNNaverMapInfoWindow infoWindow;
+
+    public RNNaverMapInfoWindow getInfoWindow() {
+        return this.infoWindow;
+    }
 
     public RNNaverMapMarker(EventEmittable emitter, Context context) {
         super(emitter, context);
@@ -165,22 +168,10 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
         feature.setCaptionText("");
     }
 
-    public void setInfoWindow(String text, boolean visible) {
-        if (this.infoWindow == null) {
-            this.infoWindow = new InfoWindow();
-            this.infoWindow.setOnClickListener(this);
-        }
+    public void setInfoWindow(RNNaverMapInfoWindow value) {
+        this.infoWindow = value;
 
-        this.infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this.getContext()) {
-            @NonNull
-            @Override
-            public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                return text;
-            }
-        });
-
-        isInfoWindowVisible = visible;
-        if (visible) {
+        if (this.infoWindow.isVisible) {
             this.openInfo();
         }
     }
@@ -189,15 +180,14 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
         if (this.infoWindow == null) return;
 
         this.infoWindow.close();
-        this.infoWindow.setOnClickListener(null);
+        this.infoWindow.destroy();
         this.infoWindow = null;
-        isInfoWindowVisible = false;
     }
 
     public void openInfo() {
         if (this.infoWindow == null) return;
 
-        this.infoWindow.open(feature);
+        this.infoWindow.open();
     }
 
     public void setImage(String uri) {
@@ -338,8 +328,8 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
     public void onFeatureAppended() {
         super.onFeatureAppended();
 
-        if (this.isInfoWindowVisible && this.infoWindow != null) {
-            this.infoWindow.open(this.feature);
+        if (this.infoWindow != null && this.infoWindow.isVisible) {
+            this.infoWindow.open();
         }
     }
 }

@@ -293,8 +293,16 @@ export interface MarkerProps extends MapOverlay {
         maxZoom?: number;
     };
     info?: {
-        text?: string;
         visible?: boolean;
+        text?: string;
+        textSize?: number;
+        color?: string;
+        multiline?: boolean;
+        backgroundColor?: string;
+        maxWidth?: number;
+        paddingHorizental?: number;
+        paddingVertical?: number;
+        cornerRadius: number
     };
     style?: StyleProp<ViewStyle>;
 }
@@ -317,6 +325,11 @@ export class Marker extends Component<MarkerProps> {
                 textSize: this.props.subCaption.textSize ?? 12,
                 color: parseColor(this.props.subCaption.color),
                 haloColor: parseColor(this.props.subCaption.haloColor),
+            }}
+            info={this.props.info && {
+                ...this.props.info,
+                color: parseColor(this.props.info.color),
+                backgroundColor: parseColor(this.props.info.backgroundColor),
             }}/>
     }
 }

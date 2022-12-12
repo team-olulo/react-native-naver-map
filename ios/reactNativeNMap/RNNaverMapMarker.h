@@ -5,12 +5,17 @@
 //  Copyright © 2019 flask. All rights reserved.
 //
 
+#ifndef RNNaverMapMarker_H
+#define RNNaverMapMarker_H
+
 #import <React/RCTBridge.h>
 #import <React/RCTComponent.h>
 #import <NMapsMap/NMGLatLng.h>
 #import <NMapsMap/NMFMarker.h>
 
 #import "RCTConvert+NMFMapView.h"
+
+#import "RNNaverMapInfoWindow.h"
 
 @interface RNNaverMapMarker : UIView
 
@@ -33,7 +38,7 @@
 @property (nonatomic, strong) UIColor *pinColor;
 @property (nonatomic, assign) CGFloat alpha;
 @property (nonatomic, assign) CGPoint anchor;
-@property (nonatomic, strong) NMFInfoWindow *realInfoWindow;
+@property (nonatomic, weak) RNNaverMapInfoWindow *infoWindow;
 @property (nonatomic, assign) BOOL isInfoWIndowVisible;
 @property (nonatomic, copy) RCTDirectEventBlock onClick;
 
@@ -53,8 +58,11 @@
 - (void)setSubCaptionRequestedWidth:(CGFloat) subCaptionWidth;
 - (void)setSubCaptionMinZoom:(double) subMinZoom;
 - (void)setSubCaptionMaxZoom:(double) subMaxZoom;
-- (void)setInfoWindowText:(NSString *) text;
-- (void)setInfoWindowVisible:(BOOL) visible;
+
+-(void)setInfoWindow:(RNNaverMapInfoWindow *)infoWindow;
+-(void)openInfo;
 
 - (void)didAppearOnMap;
 @end
+
+#endif
