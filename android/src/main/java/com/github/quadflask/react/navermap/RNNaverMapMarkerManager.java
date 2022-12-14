@@ -156,13 +156,13 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
         boolean isVisible = map.hasKey("visible") ? map.getBoolean("visible") : true;
         String text = map.hasKey("text") ? map.getString("text") : null;
         Double textSize = map.hasKey("textSize") ? map.getDouble("textSize") : null;
-        int color = map.hasKey("color") ? parseColorString(map.getString("color")) : null;
+        Integer color = map.hasKey("color") ? parseColorString(map.getString("color")) : null;
         boolean multiline = map.hasKey("multiline") ? map.getBoolean("multiline") : false;
-        int maxWidth = map.hasKey("maxWidth") ? map.getInt("maxWidth") : null;
-        int backgroundColor = map.hasKey("backgroundColor") ? parseColorString(map.getString("backgroundColor")) : null;
-        int paddingHorizental = map.hasKey("paddingHorizental") ? map.getInt("paddingHorizental") : 0;
-        int paddingVertical = map.hasKey("paddingVertical") ? map.getInt("paddingVertical") : 0;
-        int cornerRadius = map.hasKey("cornerRadius") ? map.getInt("cornerRadius") : 8;
+        Integer maxWidth = map.hasKey("maxWidth") ? map.getInt("maxWidth") : null;
+        Integer backgroundColor = map.hasKey("backgroundColor") ? parseColorString(map.getString("backgroundColor")) : null;
+        Integer paddingHorizental = map.hasKey("paddingHorizental") ? map.getInt("paddingHorizental") : 0;
+        Integer paddingVertical = map.hasKey("paddingVertical") ? map.getInt("paddingVertical") : 0;
+        Integer cornerRadius = map.hasKey("cornerRadius") ? map.getInt("cornerRadius") : 8;
 
         RNNaverMapInfoWindow infoWindow = view.getInfoWindow();
         boolean hasInfoWindow = false;
