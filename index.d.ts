@@ -198,7 +198,7 @@ export interface MarkerProps extends MapOverlay {
         maxWidth?: number;
         paddingHorizental?: number;
         paddingVertical?: number;
-        cornerRadius: number;
+        cornerRadius?: number;
     };
     style?: StyleProp<ViewStyle>;
 }
