@@ -21,6 +21,8 @@ public class RNNaverMapInfoWindow {
     Integer paddingHorizental = 0;
     Integer paddingVertical = 0;
     Integer cornerRadius = 8;
+    Integer zIndex;
+    Integer globalZIndex;
 
     InfoWindow.ViewAdapter adapter;
 
@@ -103,6 +105,26 @@ public class RNNaverMapInfoWindow {
 
         this.cornerRadius = value;
         return this;
+    }
+
+    public RNNaverMapInfoWindow setZIndex(Integer value) {
+        if (value == null) return this;
+
+        this.zIndex = value;
+        this.applyZIndex(value);
+        return this;
+    }
+
+    public RNNaverMapInfoWindow setGlobalZIndex(Integer value) {
+        if (value == null) return this;
+
+        this.globalZIndex = value;
+        this.infoWindow.setGlobalZIndex(value);
+        return this;
+    }
+
+    public void applyZIndex(int value) {
+        this.infoWindow.setZIndex(value);
     }
 
     public void open() {
