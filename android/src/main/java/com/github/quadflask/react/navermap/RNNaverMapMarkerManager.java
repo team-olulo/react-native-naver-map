@@ -163,6 +163,8 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
         Integer paddingHorizental = map.hasKey("paddingHorizental") ? map.getInt("paddingHorizental") : 0;
         Integer paddingVertical = map.hasKey("paddingVertical") ? map.getInt("paddingVertical") : 0;
         Integer cornerRadius = map.hasKey("cornerRadius") ? map.getInt("cornerRadius") : 8;
+        Integer zIndex = map.hasKey("zIndex") ? map.getInt("zIndex") : null;
+        Integer globalZIndex = map.hasKey("globalZIndex") ? map.getInt("globalZIndex") : null;
 
         RNNaverMapInfoWindow infoWindow = view.getInfoWindow();
         boolean hasInfoWindow = false;
@@ -181,7 +183,9 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
                 .setMaxWidth(maxWidth)
                 .setPaddingHorizental(paddingHorizental)
                 .setPaddingVertical(paddingVertical)
-                .setCornerRadius(cornerRadius);
+                .setCornerRadius(cornerRadius)
+                .setZIndex(zIndex)
+                .setGlobalZIndex(globalZIndex);
 
         if (hasInfoWindow) {
             if (isVisible && !infoWindow.isVisible) {

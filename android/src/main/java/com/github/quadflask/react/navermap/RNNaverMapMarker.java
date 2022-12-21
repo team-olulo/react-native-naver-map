@@ -130,6 +130,10 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
 
     public void setZIndex(int zIndex) {
         feature.setZIndex(zIndex);
+
+        if (this.infoWindow != null && this.infoWindow.zIndex == null) {
+            this.infoWindow.applyZIndex(feature.getZIndex());
+        }
     }
 
     public void setAnchor(float x, float y) {
