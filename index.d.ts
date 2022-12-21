@@ -55,6 +55,18 @@ export declare enum Align {
     BottomRight = 7,
     BottomLeft = 8
 }
+export declare const NaverMapGlobalIndexes: {
+    infoWindow: number;
+    location: number;
+    marker: number;
+    arrow: number;
+    /** 경로선 */
+    path: number;
+    /** 셰이프(폴리곤, 폴리라인, 서클) */
+    shape: number;
+    /** 지상 */
+    ground: number;
+};
 export interface Rect {
     left?: number;
     top?: number;
