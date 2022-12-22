@@ -14,6 +14,8 @@
 
 #import "RCTConvert+NMFMapView.h"
 
+#define isNull(value) value == nil || [value isKindOfClass:[NSNull class]]
+
 @implementation RNNaverMapMarkerManager
 
 RCT_EXPORT_MODULE()
@@ -87,6 +89,8 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
   CGFloat paddingHorizental = [RCTConvert CGFloat:dic[@"paddingHorizental"]];
   CGFloat paddingVertical = [RCTConvert CGFloat:dic[@"paddingVertical"]];
   CGFloat cornerRadius = [RCTConvert CGFloat:dic[@"cornerRadius"]];
+    NSInteger zIndex = [RCTConvert NSInteger: dic[@"zIndex"]];
+    NSInteger globalZIndex = [RCTConvert NSInteger: dic[@"globalZIndex"]];
     
     if(!visible && !isInfoWindowExist) {
         return;
@@ -104,6 +108,12 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
     [infoWindow setPaddingHorizental: paddingHorizental];
     [infoWindow setPaddingVertical: paddingVertical];
     [infoWindow setCornerRadius: cornerRadius];
+    if (!isNull(dic[@"zIndex"])) {
+        [infoWindow setZIndex: zIndex];
+    }
+    if (!isNull(dic[@"globalZIndex"])) {
+        [infoWindow setGlobalZIndex: globalZIndex];
+    }
     
   if (isInfoWindowExist) {
       if (!infoWindow.isVisible && visible) {
