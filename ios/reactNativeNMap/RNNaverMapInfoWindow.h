@@ -30,6 +30,8 @@
 @property (nonatomic, assign) CGFloat paddingHorizental;
 @property (nonatomic, assign) CGFloat paddingVertical;
 @property (nonatomic, assign) CGFloat cornerRadius;
+@property (nonatomic, assign) NSInteger zIndex;
+@property (nonatomic, assign) NSInteger globalZIndex;
 
 @property (nonatomic, weak) RNNaverMapMarker *marker;
 @property (nonatomic, strong) NMFInfoWindow *realInfoWindow;
@@ -52,6 +54,10 @@
 - (void)setPaddingHorizental:(CGFloat) value;
 - (void)setPaddingVertical:(CGFloat) value;
 - (void)setCornerRadius:(CGFloat) value;
+- (void)setZIndex:(NSInteger) value;
+- (void)setGlobalZIndex:(NSInteger) value;
+- (void)applyZIndex:(NSInteger) value;
+- (void)applyZIndexIfNeeded:(NSInteger) value;
 
 - (instancetype)initWithMarker: (RNNaverMapMarker *) marker;
 - (void)open;

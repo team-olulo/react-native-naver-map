@@ -16,6 +16,9 @@
     _realInfoWindow = [NMFInfoWindow new];
     [self createView];
     _realInfoWindow.dataSource = self;
+    _zIndex = NSIntegerMin;
+    _globalZIndex = NSIntegerMin;
+    
     return self;
 }
 
@@ -80,6 +83,27 @@
 
 - (void)setCornerRadius:(CGFloat)value {
     _cornerRadius = value;
+}
+
+- (void)setZIndex:(NSInteger)value {
+    _zIndex = value;
+    [self applyZIndex: value];
+}
+
+
+- (void)setGlobalZIndex:(NSInteger)value {
+    _globalZIndex = value;
+    [_realInfoWindow setGlobalZIndex: value];
+}
+
+- (void)applyZIndex:(NSInteger)value {
+    [_realInfoWindow setZIndex: value];
+}
+
+- (void)applyZIndexIfNeeded:(NSInteger)value {
+    if (value == NSIntegerMin) return;
+        
+    [self applyZIndex: value];
 }
 
 - (void)open {

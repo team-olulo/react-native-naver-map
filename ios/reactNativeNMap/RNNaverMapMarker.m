@@ -49,6 +49,7 @@
 
 - (void)setZIndex:(NSInteger) zIndex {
     _realMarker.zIndex = zIndex;
+    [_infoWindow applyZIndexIfNeeded: zIndex];
 }
 
 - (void)setHidden:(BOOL) hidden {
@@ -190,6 +191,7 @@
     
     if (_infoWindow.isVisible) {
         [_infoWindow open];
+        [_infoWindow applyZIndexIfNeeded: _zIndex];
     }
 }
 
