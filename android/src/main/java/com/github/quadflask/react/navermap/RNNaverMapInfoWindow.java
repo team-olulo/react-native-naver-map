@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,14 +18,19 @@ public class RNNaverMapInfoWindow {
     Integer color;
     boolean multiline = false;
     Integer backgroundColor;
+    Double backgroundOpacity = 1d;
     Integer maxWidth;
     Integer paddingHorizental = 0;
     Integer paddingVertical = 0;
     Integer cornerRadius = 8;
     Integer zIndex;
     Integer globalZIndex;
+    Integer borderColor;
+    Integer borderWidth;
 
     InfoWindow.ViewAdapter adapter;
+    TextView textView;
+    RelativeLayout textViewContainer;
 
     private InfoWindow infoWindow;
     private RNNaverMapMarker marker;
@@ -79,6 +85,13 @@ public class RNNaverMapInfoWindow {
         return this;
     }
 
+    public RNNaverMapInfoWindow setBackgroundOpacity(Double value) {
+        if (value == null) return this;
+
+        this.backgroundOpacity = value;
+        return this;
+    }
+
     public RNNaverMapInfoWindow setMaxWidth(Integer value) {
         if (value == null) return this;
 
@@ -127,6 +140,20 @@ public class RNNaverMapInfoWindow {
         this.infoWindow.setZIndex(value);
     }
 
+    public RNNaverMapInfoWindow setBorderColor(Integer value) {
+        if (value == null) return this;
+
+        this.borderColor = value;
+        return this;
+    }
+
+    public RNNaverMapInfoWindow setBorderWidth(Integer value) {
+        if (value == null) return this;
+
+        this.borderWidth = value;
+        return this;
+    }
+
     public void open() {
         if (this.marker == null) return;
 
@@ -148,7 +175,15 @@ public class RNNaverMapInfoWindow {
             @NonNull
             @Override
             public View getView(@NonNull InfoWindow infoWindow) {
-                TextView textView = new TextView(marker.getContext());
+                if (textViewContainer == null) {
+                    textViewContainer = new RelativeLayout(marker.getContext());
+                }
+
+                if (textView == null) {
+                    textView = new TextView(marker.getContext());
+                    textViewContainer.addView(textView);
+                }
+
                 float pixelRatio = marker.getContext().getResources().getDisplayMetrics().density;
 
                 if (text != null) textView.setText(text);
@@ -162,7 +197,7 @@ public class RNNaverMapInfoWindow {
                 }
                 int pixelsInPaddingHorizental = ((Double)(paddingHorizental.doubleValue() * pixelRatio)).intValue();
                 int pixelsInPaddingVertical = ((Double)(paddingVertical.doubleValue() * pixelRatio)).intValue();
-                textView.setPadding(pixelsInPaddingHorizental, pixelsInPaddingVertical, pixelsInPaddingHorizental, pixelsInPaddingVertical);
+                textViewContainer.setPadding(pixelsInPaddingHorizental, pixelsInPaddingVertical, pixelsInPaddingHorizental, pixelsInPaddingVertical);
 
                 int pixelsInRadius = ((Double)(cornerRadius.doubleValue() * pixelRatio)).intValue();
 
@@ -171,10 +206,14 @@ public class RNNaverMapInfoWindow {
                     gd.setColor(backgroundColor);
                     gd.setCornerRadius(pixelsInRadius);
 
-                    textView.setBackground(gd);
+                    if (borderWidth != null && borderColor != null) {
+                        gd.setStroke(borderWidth, borderColor);
+                    }
+                    gd.setAlpha((int)(backgroundOpacity * 255));
+                    textViewContainer.setBackground(gd);
                 }
 
-                return  textView;
+                return  textViewContainer;
             }
         };
 

@@ -8,6 +8,9 @@
 #import "RNNaverMapInfoWindow.h"
 #import "RNNaverMapMarker.h"
 
+#define DEFAULT_INFO_WINDOW_WIDTH 100
+#define DEFAULT_INFO_WINDOW_HEIGHT 44
+
 @implementation RNNaverMapInfoWindow
 
 - (instancetype)init
@@ -18,6 +21,7 @@
     _realInfoWindow.dataSource = self;
     _zIndex = NSIntegerMin;
     _globalZIndex = NSIntegerMin;
+    _borderWidth = 0;
     
     return self;
 }
@@ -69,6 +73,10 @@
     _backgroundColor = value;
 }
 
+- (void)setBackgroundOpacity:(CGFloat)value {
+    _backgroundOpacity = value;
+}
+
 - (void)setMaxWidth:(CGFloat)value {
     _maxWidth = value;
 }
@@ -106,6 +114,14 @@
     [self applyZIndex: value];
 }
 
+- (void)setBorderWidth:(CGFloat)value {
+    _borderWidth = value;
+}
+
+- (void)setBorderColor:(UIColor *)value {
+    _borderColor = value;
+}
+
 - (void)open {
     if (_marker) {
         [_realInfoWindow openWithMarker:_marker.realMarker];
@@ -126,22 +142,41 @@
     _view = [[UIView alloc] initWithFrame: CGRectMake(0, 0, 100, 44)];
     _view.translatesAutoresizingMaskIntoConstraints = false;
     _view.clipsToBounds = true;
+    _view.backgroundColor = [UIColor colorWithWhite: 0 alpha: 0];
+    
+    _backgroundView = [[UIView alloc] initWithFrame: CGRectMake(_borderWidth, _borderWidth, DEFAULT_INFO_WINDOW_WIDTH - _borderWidth * 2, DEFAULT_INFO_WINDOW_HEIGHT - _borderWidth * 2)];
+    _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _backgroundView.clipsToBounds = true;
+    [_view addSubview:_backgroundView];
     
     _label = [[UILabel alloc] initWithFrame: CGRectZero];
     _label.translatesAutoresizingMaskIntoConstraints = false;
-    
     [_view addSubview:_label];
 }
 
 - (void)updateView {
     if (!_view) return;
     
-    [_view setBackgroundColor: _backgroundColor];
+    _view.opaque = false;
+    [_backgroundView setBackgroundColor: _backgroundColor];
+    RCTLogTrace(@"InfoWindow updateView backgroundColor %@", _backgroundColor.description);
+    [_backgroundView setAlpha: _backgroundOpacity];
+    _backgroundView.layer.cornerRadius = _cornerRadius;
+    
+    _backgroundView.layer.borderWidth = _borderWidth;
+    RCTLogTrace(@"InfoWindow updateView borderWidth %f", _borderWidth);
+    
+    if (_borderColor) {
+        _backgroundView.layer.borderColor = _borderColor.CGColor;
+    } else {
+        _backgroundView.layer.borderColor = nil;
+    }
+    RCTLogTrace(@"InfoWindow updateView borderWidth %@", _borderColor);
+    
     _label.text = _text;
     _label.font = [_label.font fontWithSize:_textSize];
     _label.textColor = _color;
     _label.numberOfLines = _multiline ? 0 : 1;
-    _view.backgroundColor = _backgroundColor;
     _view.layer.cornerRadius = _cornerRadius;
     
     if (!_widthContaraint) {

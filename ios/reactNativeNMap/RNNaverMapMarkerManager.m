@@ -85,12 +85,16 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
   UIColor *color = [RCTConvert UIColor:dic[@"color"]];
   BOOL multiline = [RCTConvert BOOL:dic[@"multiline"]];
   UIColor *backgroundColor = [RCTConvert UIColor:dic[@"backgroundColor"]];
+    CGFloat backgroundOpacity = [RCTConvert CGFloat: dic[@"backgroundOpacity"]];
   CGFloat maxWidth = [RCTConvert CGFloat:dic[@"maxWidth"]];
   CGFloat paddingHorizental = [RCTConvert CGFloat:dic[@"paddingHorizental"]];
   CGFloat paddingVertical = [RCTConvert CGFloat:dic[@"paddingVertical"]];
   CGFloat cornerRadius = [RCTConvert CGFloat:dic[@"cornerRadius"]];
     NSInteger zIndex = [RCTConvert NSInteger: dic[@"zIndex"]];
     NSInteger globalZIndex = [RCTConvert NSInteger: dic[@"globalZIndex"]];
+    NSDictionary *styleDic = [RCTConvert NSDictionary: dic[@"style"]];
+    NSInteger borderWidth = [RCTConvert NSInteger: styleDic[@"borderWidth"]];
+    UIColor *borderColor = [RCTConvert UIColor: styleDic[@"borderColor"]];
     
     if(!visible && !isInfoWindowExist) {
         return;
@@ -104,10 +108,14 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
     [infoWindow setColor: color];
     [infoWindow setMultiline: multiline];
     [infoWindow setBackgroundColor: backgroundColor];
+    [infoWindow setBackgroundOpacity: backgroundOpacity];
     [infoWindow setMaxWidth: maxWidth];
     [infoWindow setPaddingHorizental: paddingHorizental];
     [infoWindow setPaddingVertical: paddingVertical];
     [infoWindow setCornerRadius: cornerRadius];
+    [infoWindow setBorderWidth: borderWidth];
+    [infoWindow setBorderColor: borderColor];
+    
     if (!isNull(dic[@"zIndex"])) {
         [infoWindow setZIndex: zIndex];
     }
