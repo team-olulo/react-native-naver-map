@@ -160,11 +160,15 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
         boolean multiline = map.hasKey("multiline") ? map.getBoolean("multiline") : false;
         Integer maxWidth = map.hasKey("maxWidth") ? map.getInt("maxWidth") : null;
         Integer backgroundColor = map.hasKey("backgroundColor") ? parseColorString(map.getString("backgroundColor")) : null;
+        Double backgroundOpacity = map.hasKey("backgroundOpacity") ? map.getDouble("backgroundOpacity") : 1d;
         Integer paddingHorizental = map.hasKey("paddingHorizental") ? map.getInt("paddingHorizental") : 0;
         Integer paddingVertical = map.hasKey("paddingVertical") ? map.getInt("paddingVertical") : 0;
         Integer cornerRadius = map.hasKey("cornerRadius") ? map.getInt("cornerRadius") : 8;
         Integer zIndex = map.hasKey("zIndex") ? map.getInt("zIndex") : null;
         Integer globalZIndex = map.hasKey("globalZIndex") ? map.getInt("globalZIndex") : null;
+        ReadableMap styleMap = map.hasKey("style") ? map.getMap("style") : null;
+        Integer borderWidth = (styleMap != null && styleMap.hasKey("borderWidth")) ? styleMap.getInt("borderWidth") : null;
+        Integer borderColor = (styleMap != null && styleMap.hasKey("borderColor")) ? parseColorString(styleMap.getString("borderColor")) : null;
 
         RNNaverMapInfoWindow infoWindow = view.getInfoWindow();
         boolean hasInfoWindow = false;
@@ -180,12 +184,15 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
                 .setColor(color)
                 .setMultiline(multiline)
                 .setBackgroundColor(backgroundColor)
+                .setBackgroundOpacity(backgroundOpacity)
                 .setMaxWidth(maxWidth)
                 .setPaddingHorizental(paddingHorizental)
                 .setPaddingVertical(paddingVertical)
                 .setCornerRadius(cornerRadius)
                 .setZIndex(zIndex)
-                .setGlobalZIndex(globalZIndex);
+                .setGlobalZIndex(globalZIndex)
+                .setBorderColor(borderColor)
+                .setBorderWidth(borderWidth);
 
         if (hasInfoWindow) {
             if (isVisible && !infoWindow.isVisible) {

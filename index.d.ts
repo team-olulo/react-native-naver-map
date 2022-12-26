@@ -159,6 +159,10 @@ export interface MapOverlay {
     coordinate: Coord;
     onClick?: () => void;
 }
+export interface InfoWindowStyle {
+    borderWidth?: number;
+    borderColor: string;
+}
 export interface MarkerProps extends MapOverlay {
     anchor?: {
         x: number;
@@ -207,12 +211,14 @@ export interface MarkerProps extends MapOverlay {
         color?: string;
         multiline?: boolean;
         backgroundColor?: string;
+        backgroundOpacity?: number;
         maxWidth?: number;
         paddingHorizental?: number;
         paddingVertical?: number;
         cornerRadius?: number;
         zIndex?: number;
         globalZIndex?: number;
+        style?: InfoWindowStyle;
     };
     style?: StyleProp<ViewStyle>;
 }
