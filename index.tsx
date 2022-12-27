@@ -269,7 +269,7 @@ export interface MapOverlay {
 
 export interface InfoWindowStyle {
     borderWidth?: number,
-    borderColor: string,
+    borderColor?: string,
 }
 
 export interface MarkerProps extends MapOverlay {
@@ -324,6 +324,7 @@ export interface MarkerProps extends MapOverlay {
         cornerRadius?: number
         zIndex?: number
         globalZIndex?: number
+        offset: number
         style?: InfoWindowStyle
     };
     style?: StyleProp<ViewStyle>;
@@ -352,6 +353,10 @@ export class Marker extends Component<MarkerProps> {
                 ...this.props.info,
                 color: parseColor(this.props.info.color),
                 backgroundColor: parseColor(this.props.info.backgroundColor),
+                style: this.props.info?.style && {
+                    ...this.props.info.style,
+                    borderColor: parseColor(this.props.info.style.borderColor)
+                }
             }}/>
     }
 }

@@ -10,6 +10,7 @@
 
 #define DEFAULT_INFO_WINDOW_WIDTH 100
 #define DEFAULT_INFO_WINDOW_HEIGHT 44
+#define DEFAULT_INFO_WINDOW_OFFSET -10
 
 @implementation RNNaverMapInfoWindow
 
@@ -22,6 +23,7 @@
     _zIndex = NSIntegerMin;
     _globalZIndex = NSIntegerMin;
     _borderWidth = 0;
+    _offset = 0;
     
     return self;
 }
@@ -114,6 +116,19 @@
     [self applyZIndex: value];
 }
 
+- (void)setOffset:(NSInteger)value {
+    _offset = value;
+    [self applyOffset: value];
+}
+
+- (void)applyOffset:(NSInteger)value {
+    _realInfoWindow.offsetY = DEFAULT_INFO_WINDOW_OFFSET + value;
+}
+
+- (void)applyOffsetIfNeeded {
+    [self applyOffset: _offset];
+}
+
 - (void)setBorderWidth:(CGFloat)value {
     _borderWidth = value;
 }
@@ -125,6 +140,7 @@
 - (void)open {
     if (_marker) {
         [_realInfoWindow openWithMarker:_marker.realMarker];
+        [self applyOffsetIfNeeded];
     }
 }
 

@@ -166,6 +166,7 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
         Integer cornerRadius = map.hasKey("cornerRadius") ? map.getInt("cornerRadius") : 8;
         Integer zIndex = map.hasKey("zIndex") ? map.getInt("zIndex") : null;
         Integer globalZIndex = map.hasKey("globalZIndex") ? map.getInt("globalZIndex") : null;
+        Integer offset = map.hasKey("offset") ? map.getInt("offset") : null;
         ReadableMap styleMap = map.hasKey("style") ? map.getMap("style") : null;
         Integer borderWidth = (styleMap != null && styleMap.hasKey("borderWidth")) ? styleMap.getInt("borderWidth") : null;
         Integer borderColor = (styleMap != null && styleMap.hasKey("borderColor")) ? parseColorString(styleMap.getString("borderColor")) : null;
@@ -191,6 +192,7 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
                 .setCornerRadius(cornerRadius)
                 .setZIndex(zIndex)
                 .setGlobalZIndex(globalZIndex)
+                .setOffset(offset)
                 .setBorderColor(borderColor)
                 .setBorderWidth(borderWidth);
 

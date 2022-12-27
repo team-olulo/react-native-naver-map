@@ -12,6 +12,11 @@ import androidx.annotation.NonNull;
 import com.naver.maps.map.overlay.InfoWindow;
 
 public class RNNaverMapInfoWindow {
+    /**
+     * 원래 0이 기본 값이지만 0일 때 간격이 없는 상태가 아님
+     */
+    static final int DEFAULT_INFO_WINDOW_OFFSET = -11;
+
     boolean isVisible = false;
     String text;
     Double textSize;
@@ -25,6 +30,7 @@ public class RNNaverMapInfoWindow {
     Integer cornerRadius = 8;
     Integer zIndex;
     Integer globalZIndex;
+    Integer offset;
     Integer borderColor;
     Integer borderWidth;
 
@@ -34,6 +40,8 @@ public class RNNaverMapInfoWindow {
 
     private InfoWindow infoWindow;
     private RNNaverMapMarker marker;
+
+    float pixelRatio = 1;
 
     public RNNaverMapInfoWindow() {
         this.infoWindow = new InfoWindow();
@@ -140,6 +148,20 @@ public class RNNaverMapInfoWindow {
         this.infoWindow.setZIndex(value);
     }
 
+    public RNNaverMapInfoWindow setOffset(Integer value) {
+        this.offset = value;
+        this.applyOffset(value);
+
+        return this;
+    }
+
+    public void applyOffset(Integer value) {
+        Integer offsetWithDefault = value != null ? DEFAULT_INFO_WINDOW_OFFSET + value : null;
+        int pixelsInOffset = offsetWithDefault != null ? ((Double) (offsetWithDefault.doubleValue() * pixelRatio)).intValue() : 0;
+
+        this.infoWindow.setOffsetY(pixelsInOffset);
+    }
+
     public RNNaverMapInfoWindow setBorderColor(Integer value) {
         if (value == null) return this;
 
@@ -184,7 +206,7 @@ public class RNNaverMapInfoWindow {
                     textViewContainer.addView(textView);
                 }
 
-                float pixelRatio = marker.getContext().getResources().getDisplayMetrics().density;
+                pixelRatio = marker.getContext().getResources().getDisplayMetrics().density;
 
                 if (text != null) textView.setText(text);
                 if (textSize != null) textView.setTextSize(textSize.floatValue());
@@ -212,6 +234,8 @@ public class RNNaverMapInfoWindow {
                     gd.setAlpha((int)(backgroundOpacity * 255));
                     textViewContainer.setBackground(gd);
                 }
+
+                applyOffset(offset);
 
                 return  textViewContainer;
             }

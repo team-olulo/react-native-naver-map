@@ -92,6 +92,7 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
   CGFloat cornerRadius = [RCTConvert CGFloat:dic[@"cornerRadius"]];
     NSInteger zIndex = [RCTConvert NSInteger: dic[@"zIndex"]];
     NSInteger globalZIndex = [RCTConvert NSInteger: dic[@"globalZIndex"]];
+    NSInteger offset = [RCTConvert NSInteger: dic[@"offset"]];
     NSDictionary *styleDic = [RCTConvert NSDictionary: dic[@"style"]];
     NSInteger borderWidth = [RCTConvert NSInteger: styleDic[@"borderWidth"]];
     UIColor *borderColor = [RCTConvert UIColor: styleDic[@"borderColor"]];
@@ -113,6 +114,7 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
     [infoWindow setPaddingHorizental: paddingHorizental];
     [infoWindow setPaddingVertical: paddingVertical];
     [infoWindow setCornerRadius: cornerRadius];
+    [infoWindow setOffset: offset];
     [infoWindow setBorderWidth: borderWidth];
     [infoWindow setBorderColor: borderColor];
     
