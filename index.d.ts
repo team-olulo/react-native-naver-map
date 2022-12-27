@@ -161,7 +161,7 @@ export interface MapOverlay {
 }
 export interface InfoWindowStyle {
     borderWidth?: number;
-    borderColor: string;
+    borderColor?: string;
 }
 export interface MarkerProps extends MapOverlay {
     anchor?: {
@@ -218,6 +218,7 @@ export interface MarkerProps extends MapOverlay {
         cornerRadius?: number;
         zIndex?: number;
         globalZIndex?: number;
+        offset: number;
         style?: InfoWindowStyle;
     };
     style?: StyleProp<ViewStyle>;

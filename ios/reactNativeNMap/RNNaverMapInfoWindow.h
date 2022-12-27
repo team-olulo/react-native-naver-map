@@ -33,6 +33,7 @@
 @property (nonatomic, assign) CGFloat cornerRadius;
 @property (nonatomic, assign) NSInteger zIndex;
 @property (nonatomic, assign) NSInteger globalZIndex;
+@property (nonatomic, assign) NSInteger offset;
 @property (nonatomic, assign) CGFloat borderWidth;
 @property (nonatomic, strong) UIColor *borderColor;
 
@@ -62,6 +63,7 @@
 - (void)setGlobalZIndex:(NSInteger) value;
 - (void)applyZIndex:(NSInteger) value;
 - (void)applyZIndexIfNeeded:(NSInteger) value;
+- (void)setOffset:(NSInteger) value;
 - (void)setBorderWidth:(CGFloat) value;
 - (void)setBorderColor:(UIColor *) value;
 
