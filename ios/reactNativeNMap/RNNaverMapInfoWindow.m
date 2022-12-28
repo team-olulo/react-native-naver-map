@@ -47,7 +47,7 @@
 
         marker.onClick(@{});
 
-        return false;
+        return true;
     };
 }
 
