@@ -103,6 +103,7 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
     
     RNNaverMapInfoWindow *infoWindow = isInfoWindowExist ? view.infoWindow : [[RNNaverMapInfoWindow alloc] initWithMarker: view];
 
+    BOOL isVisibleChanged = infoWindow.isVisible != visible;
     [infoWindow setIsVisible:visible];
     [infoWindow setText: text];
     [infoWindow setTextSize: textSize];
@@ -126,9 +127,9 @@ RCT_CUSTOM_VIEW_PROPERTY(info, NSDictionary, RNNaverMapMarker)
     }
     
   if (isInfoWindowExist) {
-      if (!infoWindow.isVisible && visible) {
+      if (isVisibleChanged && visible) {
           [infoWindow open];
-      } else if(infoWindow.isVisible && !visible) {
+      } else if(isVisibleChanged && !visible) {
           [infoWindow close];
       } else {
           [infoWindow refresh];
