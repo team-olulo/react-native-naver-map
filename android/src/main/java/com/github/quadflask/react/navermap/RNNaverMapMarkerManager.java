@@ -179,6 +179,7 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
             hasInfoWindow = true;
         }
 
+        boolean isVisibleChanged = infoWindow.isVisible != isVisible;
         infoWindow.setIsVisible(isVisible)
                 .setText(text)
                 .setTextSize(textSize)
@@ -197,9 +198,9 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
                 .setBorderWidth(borderWidth);
 
         if (hasInfoWindow) {
-            if (isVisible && !infoWindow.isVisible) {
+            if (isVisibleChanged && isVisible) {
                 infoWindow.open();
-            } else if (infoWindow.isVisible && !isVisible) {
+            } else if (isVisibleChanged && !isVisible) {
                 infoWindow.close();
             } else {
                 infoWindow.refresh();
