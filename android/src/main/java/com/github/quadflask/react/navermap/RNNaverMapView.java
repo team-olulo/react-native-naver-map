@@ -1,5 +1,8 @@
 package com.github.quadflask.react.navermap;
 
+import static com.naver.maps.map.CameraUpdate.REASON_DEVELOPER;
+import static com.naver.maps.map.CameraUpdate.REASON_GESTURE;
+
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.View;
@@ -25,13 +28,31 @@ import com.naver.maps.map.util.FusedLocationSource;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RNNaverMapView extends MapView implements OnMapReadyCallback, NaverMap.OnCameraIdleListener, NaverMap.OnMapClickListener, RNNaverMapViewProps {
+public class RNNaverMapView extends MapView implements OnMapReadyCallback, NaverMap.OnCameraIdleListener, NaverMap.OnCameraChangeListener, NaverMap.OnMapClickListener, RNNaverMapViewProps {
     private ThemedReactContext themedReactContext;
     private FusedLocationSource locationSource;
     private NaverMap naverMap;
     private ViewAttacherGroup2 attacherGroup;
     private long lastTouch = 0;
+    private long lastMoved = 0;
+    private final long IdleThreshold = 500;
+    private int lastMovingReason = REASON_DEVELOPER;
+    void updateLastMovingReason(int reason) {
+        this.lastMovingReason = reason;
+    }
+
     private final List<RNNaverMapFeature<?>> features = new ArrayList<>();
+
+    private long movingStarted = 0;
+    void updateMovingStartedIfNeeded() {
+        if (this.movingStarted > 0) return;
+
+        this.movingStarted = this.now();
+    }
+
+    void clearMovingStarted() {
+        this.movingStarted = 0;
+    }
 
     public RNNaverMapView(@NonNull ThemedReactContext themedReactContext, ReactApplicationContext appContext, FusedLocationSource locationSource, NaverMapOptions naverMapOptions, Bundle instanceStateBundle) {
         super(ReactUtil.getNonBuggyContext(themedReactContext, appContext), naverMapOptions);
@@ -53,21 +74,17 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         addView(attacherGroup);
     }
 
+    long now() {
+        return System.currentTimeMillis();
+    }
+
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
         this.naverMap.setLocationSource(locationSource);
         this.naverMap.setOnMapClickListener(this);
         this.naverMap.addOnCameraIdleListener(this);
-        this.naverMap.addOnCameraChangeListener((reason, animated) -> {
-            if (reason == -1 && System.currentTimeMillis() - lastTouch > 500) { // changed by user
-                WritableMap param = Arguments.createMap();
-                param.putInt("reason", reason);
-                param.putBoolean("animated", animated);
-                emitEvent("onTouch", param);
-                lastTouch = System.currentTimeMillis();
-            }
-        });
+        this.naverMap.addOnCameraChangeListener(this);
         onInitialized();
     }
 
@@ -281,8 +298,17 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         return features.get(index);
     }
 
+    boolean canCallCameraIdleEvent() {
+        long now = this.now();
+        if (this.movingStarted == 0) return false;
+
+        return this.now() - this.movingStarted > IdleThreshold;
+    }
+
     @Override
     public void onCameraIdle() {
+        if (!this.canCallCameraIdleEvent()) return;
+
         CameraPosition cameraPosition = naverMap.getCameraPosition();
 
         WritableMap param = Arguments.createMap();
@@ -292,7 +318,39 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         param.putDouble("heading", cameraPosition.bearing);
         param.putArray("contentRegion", ReactUtil.toWritableArray(naverMap.getContentRegion()));
         param.putArray("coveringRegion", ReactUtil.toWritableArray(naverMap.getCoveringRegion()));
+        param.putInt("reason", this.lastMovingReason);
+        param.putBoolean("animated", false);
+        param.putBoolean("isMoving", false);
 
+        this.clearMovingStarted();
+        emitEvent("onCameraChange", param);
+    }
+
+    @Override
+    public void onCameraChange(int reason, boolean animated) {
+        if (reason == REASON_GESTURE && System.currentTimeMillis() - lastTouch > 500) { // changed by user
+            WritableMap param = Arguments.createMap();
+            param.putInt("reason", reason);
+            param.putBoolean("animated", animated);
+            emitEvent("onTouch", param);
+            lastTouch = System.currentTimeMillis();
+        }
+
+        CameraPosition cameraPosition = naverMap.getCameraPosition();
+
+        WritableMap param = Arguments.createMap();
+        param.putDouble("latitude", cameraPosition.target.latitude);
+        param.putDouble("longitude", cameraPosition.target.longitude);
+        param.putDouble("zoom", cameraPosition.zoom);
+        param.putDouble("heading", cameraPosition.bearing);
+        param.putArray("contentRegion", ReactUtil.toWritableArray(naverMap.getContentRegion()));
+        param.putArray("coveringRegion", ReactUtil.toWritableArray(naverMap.getCoveringRegion()));
+        param.putInt("reason", reason);
+        param.putBoolean("animated", animated);
+        param.putBoolean("isMoving", true);
+
+        this.updateLastMovingReason(reason);
+        this.updateMovingStartedIfNeeded();
         emitEvent("onCameraChange", param);
     }
 

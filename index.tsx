@@ -96,6 +96,30 @@ export interface Rect {
     bottom?: number;
 }
 
+export enum NaverMapMoveReason {
+    idle = 1,
+    api = 0,
+    gesture = -1,
+    control = -2,
+    tracking = -3,
+}
+
+export type NaverMapCameraChangeEvent = {
+    latitude: number
+    longitude: number
+    zoom: number
+    heading: number
+    contentsRegion: [Coord, Coord, Coord, Coord, Coord]
+    coveringRegion: [Coord, Coord, Coord, Coord, Coord]
+    reason: NaverMapMoveReason
+    animated: boolean
+    isMoving: boolean
+  }
+  
+  export type NaverMapCameraChangeEventHandler = (
+    event: NaverMapCameraChangeEvent
+  ) => void
+
 export interface NaverMapViewProps {
     style?: StyleProp<ViewStyle>;
     center?: Coord & { zoom?: number; tilt?: number; bearing?: number };
@@ -105,14 +129,7 @@ export interface NaverMapViewProps {
     logoMargin?: Rect;
     logoGravity?: Gravity;
     onInitialized?: Function;
-    onCameraChange?: (event: {
-        latitude: number;
-        longitude: number;
-        zoom: number;
-        heading: number;
-        contentsRegion: [Coord, Coord, Coord, Coord, Coord];
-        coveringRegion: [Coord, Coord, Coord, Coord, Coord];
-    }) => void;
+    onCameraChange?: NaverMapCameraChangeEventHandler;
     onMapClick?: (event: {
         x: number;
         y: number;
@@ -210,14 +227,7 @@ export default class NaverMapView extends Component<NaverMapViewProps, {}> {
         })();
     };
 
-    handleOnCameraChange = (event: SyntheticEvent<{}, {
-        latitude: number;
-        longitude: number;
-        zoom: number;
-        heading: number;
-        contentsRegion: [Coord, Coord, Coord, Coord, Coord];
-        coveringRegion: [Coord, Coord, Coord, Coord, Coord];
-    }>) => this.props.onCameraChange && this.props.onCameraChange(event.nativeEvent);
+    handleOnCameraChange = (event: SyntheticEvent<{}, NaverMapCameraChangeEvent>) => this.props.onCameraChange && this.props.onCameraChange(event.nativeEvent);
 
     handleOnMapClick = (event: SyntheticEvent<{}, {
         x: number;

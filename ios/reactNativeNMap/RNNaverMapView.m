@@ -37,7 +37,14 @@
   if ((self = [super initWithFrame:frame])) {
     _reactSubviews = [NSMutableArray new];
   }
+    
+    _lastMovingReason = NMFMapChangedByDeveloper;
+    [self.mapView addCameraDelegate: self];
   return self;
+}
+
+- (void) updateLastMovingReason: (NSInteger) reason {
+    _lastMovingReason = reason;
 }
 
 - (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
@@ -120,9 +127,42 @@
       @"zoom"          : @(mapView.cameraPosition.zoom),
       @"contentRegion" : pointsToJson(mapView.contentRegion.exteriorRing.points),
       @"coveringRegion": pointsToJson(mapView.coveringRegion.exteriorRing.points),
+      @"reason"        : @(_lastMovingReason),
+      @"animated"      : @(NO),
+      @"isMoving"      : @(NO)
     });
   }
 }
+
+- (void)mapView:(NMFMapView *)mapView cameraDidChangeByReason:(NSInteger)reason animated:(BOOL)animated {
+    if (((RNNaverMapView*)self).onCameraChange == nil) return;
+    
+    CGFloat left = ((RNNaverMapView *)self).bounds.origin.x;
+    CGFloat top = ((RNNaverMapView *)self).bounds.origin.y;
+    CGFloat right = left + ((RNNaverMapView *)self).bounds.size.width;
+    CGFloat bottom = top + ((RNNaverMapView *)self).bounds.size.height;
+
+    NMFProjection *projection = ((RNNaverMapView *)self).mapView.projection;
+
+    NMGLatLng *coordLeftTop = [projection latlngFromPoint:CGPointMake(left, top)];
+    NMGLatLng *coordRightTop = [projection latlngFromPoint:CGPointMake(right, top)];
+    NMGLatLng *coordLeftBottom = [projection latlngFromPoint:CGPointMake(left, bottom)];
+    NMGLatLng *coordRightBottom = [projection latlngFromPoint:CGPointMake(right, bottom)];
+  
+    [self updateLastMovingReason: reason];
+    ((RNNaverMapView*)self).onCameraChange(@{
+      @"heading"       : @(mapView.cameraPosition.heading),
+      @"latitude"      : @(mapView.cameraPosition.target.lat),
+      @"longitude"     : @(mapView.cameraPosition.target.lng),
+      @"zoom"          : @(mapView.cameraPosition.zoom),
+      @"contentRegion" : pointsToJson(mapView.contentRegion.exteriorRing.points),
+      @"coveringRegion": pointsToJson(mapView.coveringRegion.exteriorRing.points),
+      @"reason"        : @(reason),
+      @"animated"      : @(animated),
+      @"isMoving"      : @(YES)
+    });
+}
+
 
 static NSArray* pointsToJson(NSArray<NMGLatLng*> *points) {
   NSMutableArray *array = [NSMutableArray array];
