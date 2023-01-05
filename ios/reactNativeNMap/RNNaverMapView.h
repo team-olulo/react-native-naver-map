@@ -17,7 +17,7 @@
 
 #import "RCTConvert+NMFMapView.h"
 
-@interface RNNaverMapView : NMFNaverMapView <NMFMapViewDelegate>
+@interface RNNaverMapView : NMFNaverMapView <NMFMapViewDelegate, NMFMapViewCameraDelegate>
 
 @property (nonatomic, weak) RCTBridge *bridge;
 @property (nonatomic, copy) RCTDirectEventBlock onInitialized;
@@ -28,6 +28,8 @@
 @property (nonatomic, assign) BOOL showsCompass;
 @property (nonatomic, assign) BOOL zoomEnabled;
 @property (nonatomic, assign) BOOL showsMyLocationButton;
+
+@property (nonatomic, assign) NSInteger lastMovingReason;
 
 - (void)onMapSetup;
 

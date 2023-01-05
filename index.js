@@ -85,6 +85,14 @@ export const NaverMapGlobalIndexes = {
     /** 지상 */
     ground: -300000
 };
+export var NaverMapMoveReason;
+(function (NaverMapMoveReason) {
+    NaverMapMoveReason[NaverMapMoveReason["idle"] = 1] = "idle";
+    NaverMapMoveReason[NaverMapMoveReason["api"] = 0] = "api";
+    NaverMapMoveReason[NaverMapMoveReason["gesture"] = -1] = "gesture";
+    NaverMapMoveReason[NaverMapMoveReason["control"] = -2] = "control";
+    NaverMapMoveReason[NaverMapMoveReason["tracking"] = -3] = "tracking";
+})(NaverMapMoveReason || (NaverMapMoveReason = {}));
 const RNNaverMapViewModule = NativeModules.RNNaverMapView;
 export default class NaverMapView extends Component {
     constructor() {
