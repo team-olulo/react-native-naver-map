@@ -12,6 +12,8 @@
 #define DEFAULT_INFO_WINDOW_HEIGHT 44
 #define DEFAULT_INFO_WINDOW_OFFSET -10
 
+NSString *ellipsizeText = @"...";
+
 @implementation RNNaverMapInfoWindow
 
 - (instancetype)init
@@ -170,6 +172,40 @@
     [_view addSubview:_label];
 }
 
+- (CGFloat)measureWidthForText:(NSString *)text{
+    if (_text == nil) return 0;
+    
+    _label.text = text;
+    return _label.intrinsicContentSize.width;
+}
+
+- (void)measureEllipsizeTextWidthIfNeed{
+    if (_text == nil) return;
+    
+    _ellipsizeTextWidth = [self measureWidthForText: ellipsizeText];
+}
+
+- (void)ellipsizeTextIfNeeded {
+    CGFloat textWidth = [self measureWidthForText: _text];
+    if (_ellipsizedText == nil) _ellipsizedText = _text;
+    
+    if (_maxWidth > 0 && textWidth <= _maxWidth || _multiline) return;
+    
+    int textCount = (int)_text.length;
+    if (textCount < 2) return;
+    
+    [self measureEllipsizeTextWidthIfNeed];
+    CGFloat maxWidthWithoutEllipsize = _maxWidth - _ellipsizeTextWidth;
+    CGFloat newEllipsizedTextWidth = maxWidthWithoutEllipsize + 1;
+    
+    for (int i = textCount - 1; newEllipsizedTextWidth > maxWidthWithoutEllipsize; i--) {
+        NSString *newEllipsizedText = [_text substringToIndex: i];
+        newEllipsizedTextWidth = [self measureWidthForText: newEllipsizedText];
+        
+        _ellipsizedText = [newEllipsizedText stringByAppendingString: ellipsizeText];
+    }
+}
+
 - (void)updateView {
     if (!_view) return;
     
@@ -189,18 +225,20 @@
     }
     RCTLogTrace(@"InfoWindow updateView borderWidth %@", _borderColor);
     
-    _label.text = _text;
     _label.font = [_label.font fontWithSize:_textSize];
     _label.textColor = _color;
     _label.numberOfLines = _multiline ? 0 : 1;
     _view.layer.cornerRadius = _cornerRadius;
     
+    [self ellipsizeTextIfNeeded];
+    _label.text = _ellipsizedText;
+    
     if (!_widthContaraint) {
-        _widthContaraint = [_view.widthAnchor constraintLessThanOrEqualToConstant: _maxWidth];
-        [_widthContaraint setActive: true];
-    } else {
-        _widthContaraint.constant = _maxWidth;
+        _widthContaraint = [_view.widthAnchor constraintLessThanOrEqualToConstant: 0];
     }
+    
+    _widthContaraint.constant = _maxWidth > 0 ? (_multiline ? _maxWidth : 10000) : 0;
+    [_widthContaraint setActive: _maxWidth > 0];
     
     if (!_leftContaraint) {
         _leftContaraint = [_label.leftAnchor constraintEqualToAnchor: _view.leftAnchor constant: _paddingHorizental];

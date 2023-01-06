@@ -49,6 +49,9 @@
 @property (nonatomic, strong) NSLayoutConstraint *topContaraint;
 @property (nonatomic, strong) NSLayoutConstraint *bottomContaraint;
 
+@property (nonatomic, copy) NSString *ellipsizedText;
+@property (nonatomic, assign) CGFloat ellipsizeTextWidth;
+
 - (void)setIsVisible:(BOOL) value;
 - (void)setText:(NSString *) value;
 - (void)setTextSize:(CGFloat) value;

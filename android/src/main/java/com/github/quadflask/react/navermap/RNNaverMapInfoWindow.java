@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public class RNNaverMapInfoWindow {
 
     boolean isVisible = false;
     String text;
+    String ellipsizedText;
     Double textSize;
     Integer color;
     boolean multiline = false;
@@ -37,6 +39,8 @@ public class RNNaverMapInfoWindow {
     InfoWindow.ViewAdapter adapter;
     TextView textView;
     RelativeLayout textViewContainer;
+    int ellipsizeTextWidth = 0;
+    String ellipsizeText = "...";
 
     private InfoWindow infoWindow;
     private RNNaverMapMarker marker;
@@ -190,6 +194,43 @@ public class RNNaverMapInfoWindow {
         this.infoWindow.close();
     }
 
+    public int measureTextWidth(String text) {
+        if (text == null) return 0;
+
+//        int pixelsInPaddingHorizental = ((Double)(paddingHorizental.doubleValue() * pixelRatio)).intValue();
+        Float pixelsInTextWidth = this.textView.getPaint().measureText(text); // * this.pixelRatio;
+
+        return pixelsInTextWidth.intValue();
+    }
+
+    public void measureEllipsizeTextWidthIfNeed() {
+        if (this.textView == null) return;
+
+        this.ellipsizeTextWidth = this.measureTextWidth(this.ellipsizeText);
+    }
+
+    public void ellipsizeTextIfNeeded() {
+        int pixelsInMaxWidth = ((Double)(this.maxWidth.doubleValue() * pixelRatio)).intValue();
+        int textWidth = this.measureTextWidth(this.text);
+        if (ellipsizedText == null) this.ellipsizedText = this.text;
+
+        if (textWidth <= pixelsInMaxWidth) return;
+
+        int textCount = this.text.length();
+        if (textCount < 2) return;
+
+        measureEllipsizeTextWidthIfNeed();
+        int maxWidthWithoutEllipsize = pixelsInMaxWidth - this.ellipsizeTextWidth;
+        int newEllipsizedTextWidth = maxWidthWithoutEllipsize + 1;
+
+        for (int i = textCount - 1; newEllipsizedTextWidth > maxWidthWithoutEllipsize; i--) {
+            String newEllipsizedText = this.text.substring(0, i);
+            newEllipsizedTextWidth = this.measureTextWidth(newEllipsizedText);
+
+            this.ellipsizedText = newEllipsizedText + this.ellipsizeText;
+        }
+    }
+
     public void createAdapter() {
         if (this.marker == null) return;
 
@@ -204,19 +245,31 @@ public class RNNaverMapInfoWindow {
                 if (textView == null) {
                     textView = new TextView(marker.getContext());
                     textViewContainer.addView(textView);
+                    // View for which we need to set constrainedWidth.
+                    ViewGroup.LayoutParams lp = textView.getLayoutParams();
+                    lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    textView.setLayoutParams(lp);
                 }
 
                 pixelRatio = marker.getContext().getResources().getDisplayMetrics().density;
 
-                if (text != null) textView.setText(text);
                 if (textSize != null) textView.setTextSize(textSize.floatValue());
                 if (color != null) textView.setTextColor(color);
                 textView.setSingleLine(!multiline);
                 textView.setEllipsize(TextUtils.TruncateAt.END);
-                if (maxWidth != null) {
+                if (maxWidth != null && multiline) {
                     Double maxWidthWithPadding = maxWidth.doubleValue() + paddingHorizental * 2;
                     textView.setMaxWidth(((Double)(maxWidthWithPadding * pixelRatio)).intValue());
                 }
+                if (text != null) {
+                    if (multiline) {
+                        textView.setText(text);
+                    }else {
+                        ellipsizeTextIfNeeded();
+                        textView.setText(ellipsizedText);
+                    }
+                }
+
                 int pixelsInPaddingHorizental = ((Double)(paddingHorizental.doubleValue() * pixelRatio)).intValue();
                 int pixelsInPaddingVertical = ((Double)(paddingVertical.doubleValue() * pixelRatio)).intValue();
                 textViewContainer.setPadding(pixelsInPaddingHorizental, pixelsInPaddingVertical, pixelsInPaddingHorizental, pixelsInPaddingVertical);
