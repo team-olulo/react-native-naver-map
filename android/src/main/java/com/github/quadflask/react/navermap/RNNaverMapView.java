@@ -35,7 +35,7 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
     private ViewAttacherGroup2 attacherGroup;
     private long lastTouch = 0;
     private long lastMoved = 0;
-    private final long IdleThreshold = 500;
+    private final long IdleThreshold = 100;
     private int lastMovingReason = REASON_DEVELOPER;
     void updateLastMovingReason(int reason) {
         this.lastMovingReason = reason;
@@ -301,8 +301,9 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
     boolean canCallCameraIdleEvent() {
         long now = this.now();
         if (this.movingStarted == 0) return false;
+        if (this.lastMovingReason != REASON_GESTURE) return true;
 
-        return this.now() - this.movingStarted > IdleThreshold;
+        return now - this.movingStarted > IdleThreshold;
     }
 
     @Override
