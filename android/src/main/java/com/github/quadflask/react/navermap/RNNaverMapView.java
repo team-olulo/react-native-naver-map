@@ -29,9 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RNNaverMapView extends MapView implements OnMapReadyCallback, NaverMap.OnCameraIdleListener, NaverMap.OnCameraChangeListener, NaverMap.OnMapClickListener, RNNaverMapViewProps {
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private ThemedReactContext themedReactContext;
     private FusedLocationSource locationSource;
     private NaverMap naverMap;
+    private NaverMapSdk naverMapSdk;
     private ViewAttacherGroup2 attacherGroup;
     private long lastTouch = 0;
     private long lastMoved = 0;
@@ -54,11 +56,12 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         this.movingStarted = 0;
     }
 
-    public RNNaverMapView(@NonNull ThemedReactContext themedReactContext, ReactApplicationContext appContext, FusedLocationSource locationSource, NaverMapOptions naverMapOptions, Bundle instanceStateBundle) {
+    public RNNaverMapView(@NonNull ThemedReactContext themedReactContext, ReactApplicationContext appContext, NaverMapOptions naverMapOptions, Bundle instanceStateBundle) {
         super(ReactUtil.getNonBuggyContext(themedReactContext, appContext), naverMapOptions);
         this.themedReactContext = themedReactContext;
-        this.locationSource = locationSource;
+        this.locationSource = new FusedLocationSource(appContext.getCurrentActivity(), LOCATION_PERMISSION_REQUEST_CODE);
         super.onCreate(instanceStateBundle);
+        naverMapSdk = NaverMapSdk.getInstance(appContext);
 //        super.onStart();
         getMapAsync(this);
 
@@ -85,6 +88,8 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         this.naverMap.setOnMapClickListener(this);
         this.naverMap.addOnCameraIdleListener(this);
         this.naverMap.addOnCameraChangeListener(this);
+
+        naverMapSdk.flushCache(() -> Log.i("NaverMap", "Map Cache Clean"));
         onInitialized();
     }
 
