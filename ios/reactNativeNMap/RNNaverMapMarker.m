@@ -11,10 +11,10 @@
 #import <React/RCTImageLoader.h>
 #import <React/RCTUtils.h>
 #import <NMapsMap/NMFNaverMapView.h>
-#import <NMapsMap/NMGLatLng.h>
 #import <NMapsMap/NMFMarker.h>
 #import <NMapsMap/NMFOverlayImage.h>
 #import <NMapsMap/NMFInfoWindowDefaultTextSource.h>
+#import <NMapsGeometry/NMGLatLng.h>
 
 #import "RCTConvert+NMFMapView.h"
 
