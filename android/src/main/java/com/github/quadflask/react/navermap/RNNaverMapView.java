@@ -5,6 +5,7 @@ import static com.naver.maps.map.CameraUpdate.REASON_GESTURE;
 
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
