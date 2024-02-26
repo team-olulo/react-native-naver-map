@@ -274,7 +274,7 @@ interface RNNaverMapView extends React.Component<{}, any> {
 
 export interface MapOverlay {
     coordinate: Coord;
-    onClick?: () => void;
+    onClick?: (event: SyntheticEvent) => void;
 }
 
 export interface InfoWindowStyle {
