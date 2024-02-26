@@ -1,4 +1,4 @@
-import React, {Component, SyntheticEvent} from 'react';
+import React, {Component, PropsWithChildren, SyntheticEvent} from 'react';
 import {findNodeHandle, Image, ImageSourcePropType, NativeModules, Platform, processColor, requireNativeComponent, StyleProp, UIManager, ViewStyle,} from 'react-native';
 // import { NativeModules } from 'react-native';
 // module.exports = NativeModules.ToastExample;
@@ -157,7 +157,7 @@ export interface NaverMapViewProps {
 
 const RNNaverMapViewModule = NativeModules.RNNaverMapView
 
-export default class NaverMapView extends Component<NaverMapViewProps, {}> {
+export default class NaverMapView extends Component<PropsWithChildren<NaverMapViewProps>, {}> {
     ref?: RNNaverMapView;
     nodeHandle?: null | number;
 
