@@ -109,7 +109,7 @@ export type NaverMapCameraChangeEvent = {
     longitude: number
     zoom: number
     heading: number
-    contentsRegion: [Coord, Coord, Coord, Coord, Coord]
+    contentRegion: [Coord, Coord, Coord, Coord, Coord]
     coveringRegion: [Coord, Coord, Coord, Coord, Coord]
     reason: NaverMapMoveReason
     animated: boolean
