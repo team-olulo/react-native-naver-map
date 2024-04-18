@@ -3,6 +3,7 @@ package com.github.quadflask.react.navermap;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.util.DisplayMetrics;
 
 import androidx.core.util.Consumer;
 
@@ -162,5 +163,11 @@ public class ReactUtil {
             }
         }
         return superContext;
+    }
+
+    public static int px2dp(int px, DisplayMetrics metrics){
+        float dp = px * ((float) metrics.density);
+
+        return (int) dp;
     }
 }
