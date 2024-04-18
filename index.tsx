@@ -338,7 +338,7 @@ export interface MarkerProps extends MapOverlay {
         style?: InfoWindowStyle
     };
     style?: StyleProp<ViewStyle>;
-    children?: React.ReactNode;
+    ignoreTouch?: boolean;
 }
 
 export class Marker extends Component<MarkerProps> {

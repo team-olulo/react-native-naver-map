@@ -227,6 +227,7 @@ export interface MarkerProps extends MapOverlay {
         style?: InfoWindowStyle;
     };
     style?: StyleProp<ViewStyle>;
+    ignoreTouch?: boolean
 }
 export declare class Marker extends Component<MarkerProps> {
     render(): JSX.Element;

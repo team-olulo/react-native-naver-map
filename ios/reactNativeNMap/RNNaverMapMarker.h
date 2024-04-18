@@ -41,6 +41,9 @@
 @property (nonatomic, weak) RNNaverMapInfoWindow *infoWindow;
 @property (nonatomic, assign) BOOL isInfoWIndowVisible;
 @property (nonatomic, copy) RCTDirectEventBlock onClick;
+@property (nonatomic, assign) BOOL ignoreTouch;
+
+- (void)setTouchHandlerIfNeed;
 
 - (void)setCaptionText:(NSString *) text;
 - (void)setCaptionTextSize:(CGFloat) size;

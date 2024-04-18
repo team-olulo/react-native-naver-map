@@ -131,6 +131,11 @@ public class RNNaverMapMarkerManager extends EventEmittableViewGroupManager<RNNa
         view.setZIndex(zIndex);
     }
 
+    @ReactProp(name = "ignoreTouch", defaultBoolean = false)
+    public void setIgnoreTouch(RNNaverMapMarker view, boolean ignoreTouch) {
+        view.setIgnoreTouch(ignoreTouch);
+    }
+
     @ReactProp(name = "caption")
     public void setCaption(RNNaverMapMarker view, ReadableMap map) {
         if (map == null || !map.hasKey("text")) {

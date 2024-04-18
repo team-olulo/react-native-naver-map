@@ -34,17 +34,24 @@
 {
   if ((self = [super init])) {
     _realMarker = [NMFMarker new];
-
-    __block RNNaverMapMarker *this = self;
-    _realMarker.touchHandler = ^BOOL(NMFOverlay *overlay) {
-      if (this.onClick != nil) {
-        this.onClick(@{});
-        return YES;
-      }
-      return NO;
-    };
   }
   return self;
+}
+
+- (void)setTouchHandlerIfNeed {
+  __block RNNaverMapMarker *this = self;
+
+    if (this.ignoreTouch) {
+        _realMarker.touchHandler = nil;
+    } else {
+      _realMarker.touchHandler = ^BOOL(NMFOverlay *overlay) {
+        if (this.onClick != nil) {
+          this.onClick(@{});
+          return YES;
+        }
+        return NO;
+      };
+    }
 }
 
 - (void)setZIndex:(NSInteger) zIndex {
@@ -112,7 +119,6 @@
 - (void)isForceShowIcon:(BOOL) isForceShowIcon {
     _realMarker.isForceShowIcon = isForceShowIcon;
 }
-
 
 - (void)setMapView:(NMFMapView*) mapView {
   _realMarker.mapView = mapView;

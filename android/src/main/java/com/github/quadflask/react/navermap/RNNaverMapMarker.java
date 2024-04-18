@@ -50,6 +50,8 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
     private int duration = 500;
     private TimeInterpolator easingFunction;
 
+    private boolean ignoreTouch = false;
+
     private RNNaverMapInfoWindow infoWindow;
 
     public RNNaverMapInfoWindow getInfoWindow() {
@@ -194,6 +196,10 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
         this.infoWindow.open();
     }
 
+    public void setIgnoreTouch(boolean ignoreTouch) {
+        this.ignoreTouch = ignoreTouch;
+    }
+
     public void setImage(String uri) {
         if (uri != null) {
             OverlayImage overlayImage = OverlayImages.get(uri);
@@ -325,6 +331,15 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
         if (getChildCount() == 0 && customView != null) {
             customView = null;
             updateCustomView();
+        }
+    }
+
+    @Override
+    public void addToMap(RNNaverMapView map) {
+        super.addToMap(map);
+
+        if (this.ignoreTouch) {
+            feature.setOnClickListener(null);
         }
     }
 
