@@ -40,6 +40,7 @@
     
     _lastMovingReason = NMFMapChangedByDeveloper;
     [self.mapView addCameraDelegate: self];
+
   return self;
 }
 
