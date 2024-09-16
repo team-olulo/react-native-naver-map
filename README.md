@@ -40,7 +40,7 @@ $ cd ios/ && pod install
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         // 네이버 지도 저장소
         maven {
             url 'https://naver.jfrog.io/artifactory/maven/'
