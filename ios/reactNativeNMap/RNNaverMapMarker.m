@@ -22,6 +22,9 @@
   RCTImageLoaderCancellationBlock _reloadImageCancellationBlock;
   __weak UIImageView *_iconImageView;
   UIView *_iconView;
+
+  // TODO: by - sds implements for custom view 
+  UIView *_subView;
 }
 
   static NSMutableDictionary *_overlayImageHolder;
@@ -250,7 +253,48 @@
 }
 
 - (void) didAppearOnMap {
-    [self setInfoWindow: _infoWindow];
+  [self setInfoWindow: _infoWindow];
 }
+
+// TODO: by - sds implements for custom view
+- (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
+  if (_reloadImageCancellationBlock) {
+    _reloadImageCancellationBlock();
+    _reloadImageCancellationBlock = nil;
+  }
+ 
+  // if ([subview isKindOfClass:[UIView class]]) {
+  //   _subView = (UIView *)subview;
+
+  //   if (self->_iconImageView) [self->_iconImageView removeFromSuperview];
+
+  //   dispatch_async(dispatch_get_main_queue(), ^{
+  //     UIView* targetView = self->_subView;
+
+  //     if (targetView != nil) {
+  //       UIImage *capture = [self captureView:targetView];
+
+  //       if (self->_iconImageView) [self->_iconImageView removeFromSuperview];
+  //       self->_realMarker.iconImage = [NMFOverlayImage overlayImageWithImage: capture];
+  //     }
+  //   });
+  // }
+}
+
+- (void)removeReactSubview:(id<RCTComponent>)subview {
+  if (self->_iconImageView) [self->_iconImageView removeFromSuperview];
+}
+
+// TODO: by - sds implements for custom view 
+// - (UIImage*)captureView:(UIView*)view {
+//   CGRect bounds = view.bounds;
+    
+//   UIGraphicsImageRenderer* renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bounds.size];
+//   UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext* _Nonnull rendererContext) {
+//     [view.layer renderInContext:rendererContext.CGContext];
+//   }];
+
+//   return image;
+// }
 
 @end
