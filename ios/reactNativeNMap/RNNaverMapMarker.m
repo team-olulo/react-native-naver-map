@@ -250,7 +250,18 @@
 }
 
 - (void) didAppearOnMap {
-    [self setInfoWindow: _infoWindow];
+  [self setInfoWindow: _infoWindow];
+}
+
+- (void)insertReactSubview:(id<RCTComponent>)subview atIndex:(NSInteger)atIndex {
+  if (_reloadImageCancellationBlock) {
+    _reloadImageCancellationBlock();
+    _reloadImageCancellationBlock = nil;
+  }
+}
+
+- (void)removeReactSubview:(id<RCTComponent>)subview {
+  if (self->_iconImageView) [self->_iconImageView removeFromSuperview];
 }
 
 @end
