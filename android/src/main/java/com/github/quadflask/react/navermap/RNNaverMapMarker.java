@@ -352,4 +352,15 @@ public class RNNaverMapMarker extends ClickableRNNaverMapFeature<Marker> impleme
             this.infoWindow.open();
         }
     }
+
+    @Override
+    public void removeFromMap() {
+        super.removeFromMap();
+
+        if (customView != null) {
+            customView.removeOnLayoutChangeListener(onLayoutChangeListener);
+        }
+        
+        ViewChangesTracker2.getInstance().removeMarker(this);
+    }
 }
