@@ -40,7 +40,8 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         this.lastMovingReason = reason;
     }
 
-    private final List<RNNaverMapFeature<?>> features = new ArrayList<>();
+    // private final List<RNNaverMapFeature<?>> features = new ArrayList<>();
+    private final List<View> children = new ArrayList<>();
 
     private long movingStarted = 0;
     void updateMovingStartedIfNeeded() {
@@ -267,41 +268,72 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
     @Override
     public void addFeature(View child, int index) {
         getMapAsync(e -> {
+            // if (child instanceof RNNaverMapFeature) {
+            //     RNNaverMapFeature<?> annotation = (RNNaverMapFeature<?>) child;
+            //     annotation.addToMap(this);
+            //     features.add(index, annotation);
+            //     int visibility = annotation.getVisibility();
+            //     annotation.setVisibility(View.INVISIBLE);
+            //     ViewGroup annotationParent = (ViewGroup) annotation.getParent();
+            //     if (annotationParent != null) {
+            //         annotationParent.removeView(annotation);
+            //     }
+            //     // Add to the parent group
+            //     attacherGroup.addView(annotation);
+            //     annotation.setVisibility(visibility);
+            // }
             if (child instanceof RNNaverMapFeature) {
                 RNNaverMapFeature<?> annotation = (RNNaverMapFeature<?>) child;
                 annotation.addToMap(this);
-                features.add(index, annotation);
-                int visibility = annotation.getVisibility();
-                annotation.setVisibility(View.INVISIBLE);
-                ViewGroup annotationParent = (ViewGroup) annotation.getParent();
-                if (annotationParent != null) {
-                    annotationParent.removeView(annotation);
-                }
-                // Add to the parent group
-                attacherGroup.addView(annotation);
-                annotation.setVisibility(visibility);
             }
+
+            children.add(index, child);
+            
+            int visibility = child.getVisibility();
+            child.setVisibility(View.INVISIBLE);
+            ViewGroup parent = (ViewGroup) child.getParent();
+            if (parent != null) {
+                parent.removeView(child);
+            }
+            
+            // Add to the parent group
+            attacherGroup.addView(child);
+            child.setVisibility(visibility);
         });
     }
 
     @Override
     public void removeFeatureAt(int index) {
-        RNNaverMapFeature<?> feature = features.remove(index);
-        feature.removeFromMap();
+        // RNNaverMapFeature<?> feature = features.remove(index);
+        // feature.removeFromMap();
+        View child = children.remove(index);
+
+        if (child instanceof RNNaverMapFeature) {
+            RNNaverMapFeature<?> annotation = (RNNaverMapFeature<?>) child;
+            annotation.removeFromMap();
+        }
+
+        ViewGroup parent = (ViewGroup) child.getParent();
+        if (parent != null) {
+            parent.removeView(child);
+        }
     }
 
     @Override
     public int getFeatureCount() {
-        return features.size();
+        // return features.size();
+        return children.size();
     }
 
     @Override
     public View getFeatureAt(int index) {
         // java.lang.IndexOutOfBoundsException 예외가 발생해서 방어함.
-        if (index < 0 || index >= features.size()) {
-            return null;
-        }
-        return features.get(index);
+        // if (index < 0 || index >= features.size()) {
+        //     return null;
+        // }
+        // return features.get(index);
+
+        return children.get(index);
     }
 
     boolean canCallCameraIdleEvent() {
@@ -379,9 +411,22 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         locationSource = null;
         naverMap = null;
         attacherGroup = null;
-        for (RNNaverMapFeature<?> feature : features)
-            feature.removeFromMap();
-        features.clear();
+        // for (RNNaverMapFeature<?> feature : features)
+        //     feature.removeFromMap();
+        // features.clear();
+        for (View child : children) {
+            if (child instanceof RNNaverMapFeature) {
+                RNNaverMapFeature<?> annotation = (RNNaverMapFeature<?>) child;
+                annotation.removeFromMap();
+            }
+
+            ViewGroup parent = (ViewGroup) child.getParent();
+            if (parent != null) {
+                parent.removeView(child);
+            }
+        }
+        children.clear();
+        
         super.onDestroy();
     }
 
