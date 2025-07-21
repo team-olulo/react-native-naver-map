@@ -332,7 +332,9 @@ public class RNNaverMapView extends MapView implements OnMapReadyCallback, Naver
         //     return null;
         // }
         // return features.get(index);
-
+        if (index < 0 || index >= children.size()) {
+            return null;
+        }
         return children.get(index);
     }
 
